@@ -2,7 +2,7 @@ from flask import Flask
 from .config import Config
 from .extensions import db, migrate
 from .routes import register_blueprints
-from app.models import User
+from app.models import User, Product, ProductItem
 
 
 def create_app():
