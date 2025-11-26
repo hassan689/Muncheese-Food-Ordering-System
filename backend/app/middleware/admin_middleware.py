@@ -6,7 +6,7 @@ from app.services.user_service import UserService
 def admin_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        user_id = request.headers.get("user_id")
+        user_id = request.headers.get("user_id") or request.headers.get("user-id")
 
         if not user_id:
             return jsonify({"message": "Missing authentication header"}), 401

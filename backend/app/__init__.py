@@ -1,14 +1,32 @@
-from flask import Flask
-from .config import Config
-from .extensions import db, migrate
-from .routes import register_blueprints
-from app.models import User, Product, ProductItem, Feedback
 
+
+from flask import Flask
+from .extensions import db, migrate
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object('config.Config')
+
+    # Initialize Plugins
     db.init_app(app)
     migrate.init_app(app, db)
-    register_blueprints(app)
+
+    with app.app_context():
+        # --- IMPORT MODELS HERE SO MIGRATION SEES THEM ---
+        from .models.user import User
+        from .models.product import Product
+        from .models.feedback import Feedback
+        
+        # ADD THESE NEW ONES:
+        from .models.order import Order
+        from .models.payment import Payment
+        from .models.delivery_info import DeliveryInfo
+        # -------------------------------------------------
+
+        # Register Blueprints
+        from .routes import register_blueprints
+        register_blueprints(app)
+
+        db.create_all() # Optional if using migrations, but good for safety
+
     return app

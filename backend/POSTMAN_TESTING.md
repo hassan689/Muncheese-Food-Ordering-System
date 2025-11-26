@@ -1038,7 +1038,6 @@ GET /api/feedback/featured
 This should return reviews from items with highest average ratings.
 
 ---
-
 ## Integration Notes
 
 ### Frontend Integration Points:
@@ -1063,4 +1062,250 @@ This should return reviews from items with highest average ratings.
    - When viewing a specific product item, call `GET /api/feedback/item/{item_id}`
    - Display all reviews sorted by date (newest first)
    - Show average rating prominently at the top
+
+5. **Placing Order:**
+   - When user does checkout add order ,call POST/api/orders/ 
+   -order will be added 
+   --after this send delivery location to and delivery location will be added 
+   --consequently payment method call add payment api also send image if online payment 
+   --
+
+
+
+
+# Postman Testing Guide - Order & Payment API
+
+## Base URL
+```
+http://localhost:5000/api
+```
+
+---
+
+## 1. Create New Order (Checkout Start)
+
+**Method:** `POST`  
+**URL:** `http://localhost:5000/api/orders/`  
+**Headers:**
+```
+Content-Type: application/json
+```
+
+**Body (JSON):**
+```json
+{
+  "customer_id": 1,
+  "total_amount": 1500.00
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "message": "Order started",
+  "order_id": 101,
+  "status": "pending"
+}
+```
+
+**Error Response (404 Not Found):**
+```json
+{
+  "error": "Customer not found"
+}
+```
+
+---
+
+## 2. Verify Delivery Location (Geo-Fencing)
+
+**Method:** `POST`  
+**URL:** `http://localhost:5000/api/orders/{order_id}/location`  
+**Example:** `http://localhost:5000/api/orders/101/location`  
+**Headers:**
+```
+Content-Type: application/json
+```
+
+**Body (JSON):**
+```json
+{
+  "address": "DHA Phase 6, Karachi",
+  "lat": 24.8000,
+  "lng": 67.0500
+}
+```
+
+**Response (200 OK) - Location is Inside Range:**
+```json
+{
+  "message": "Location valid. Proceed to payment."
+}
+```
+
+**Error Response (400 Bad Request) - Location is Too Far:**
+```json
+{
+  "error": "Too far! You are 15.5km away. Limit is 10.0km."
+}
+```
+
+---
+
+## 3. Make Payment (Confirm Order)
+
+**Method:** `POST`  
+**URL:** `http://localhost:5000/api/orders/payment`  
+
+**Important:** This request must be **Multipart/Form-Data**, NOT JSON.
+
+**Body (Form Data):**
+
+| Key | Value | Type | Notes |
+| :--- | :--- | :--- | :--- |
+| `order_id` | `101` | Text | The ID from Step 1 |
+| `amount` | `1500` | Text | |
+| `method` | `online` | Text | 'online' or 'cash' |
+| `file` | `(Select Image)` | File | Required only if method is 'online' |
+
+**Response (201 Created):**
+```json
+{
+  "message": "Payment recorded",
+  "status": "success",
+  "payment_id": 50
+}
+```
+
+**Error Response (400 Bad Request):**
+```json
+{
+  "error": "Online payment requires a screenshot."
+}
+```
+## 3.2. Admin: SEE Screenshot of payment
+
+**Method:** `GET`  
+**URL:** `/api/admin/orders/<id>/screenshot`
+---
+
+
+
+## 4. Admin: Review Order (Approve/Reject)
+
+**Method:** `POST`  
+**URL:** `http://localhost:5000/api/admin/orders/{order_id}/review`  
+**Example:** `http://localhost:5000/api/admin/orders/101/review`  
+
+**Headers (Required for Admin Access):**
+```
+user-id: 10
+```
+*(Replace `10` with the ID of a user who has `role="admin"` in the database)*
+
+**Body (JSON):**
+```json
+{
+  "action": "approve" 
+}
+```
+*(Action can be `"approve"` or `"reject"`)*
+
+**Response (200 OK):**
+```json
+{
+  "message": "Order approved successfully",
+  "status": "accepted",
+  "order_id": 101
+}
+```
+
+---
+
+## 5. Admin: Sales Reports (Analytics)
+
+**Method:** `GET`  
+**URL:** `http://localhost:5000/api/admin/reports/sales`  
+
+**Headers (Required):**
+```
+user-id: 10
+```
+
+**Query Parameters:**
+- `type` (optional): `daily`, `monthly`, or `yearly`. (Default is `daily`)
+
+**Response (200 OK) - Monthly View:**
+```json
+{
+  "type": "monthly",
+  "month": "November",
+  "total_sales": 5500.0,
+  "graph_data": [
+    {
+      "date": "2023-11-26",
+      "sales": 1500.0,
+      "count": 1
+    },
+    {
+      "date": "2023-11-27",
+      "sales": 4000.0,
+      "count": 2
+    }
+  ]
+}
+```
+
+---
+
+## Testing Scenarios
+
+### Scenario 1: Successful Online Order Flow
+1. **Create Order:** Use endpoint **1** to get an `order_id`.
+2. **Verify Location:** Use endpoint **2** with coordinates near Muncheez (Karachi).
+3. **Upload Proof:** Use endpoint **3** with `method="online"` and attach a dummy image.
+4. **Admin Approval:** Use endpoint **4** with an Admin User ID to `"approve"` the order.
+5. **Check Report:** Use endpoint **5** to see the sales amount reflected in the graph.
+
+### Scenario 2: Rejected Location (Geo-Fencing)
+1. **Create Order:** Use endpoint **1**.
+2. **Verify Location:** Use endpoint **2** with coordinates far away (e.g., Hyderabad or Lahore).
+3. **Verify:** Backend should return `400 Error` ("Too far"). Frontend should verify this error and block the user from proceeding to payment.
+
+---
+
+## Integration Notes (For Frontend Developers)
+
+### 1. Geolocation Logic
+*   **Frontend Task:** You must use the browser's API (`navigator.geolocation.getCurrentPosition`) to get the user's `lat` and `lng`.
+*   **Backend Task:** The backend performs the "Haversine" math. You do not need to calculate distance on the frontend; just send the raw coordinates.
+
+### 2. Handling File Uploads
+*   When sending data to `/api/orders/payment`, **DO NOT** use `JSON.stringify()`.
+*   Use the JavaScript `FormData` object:
+    ```javascript
+    const formData = new FormData();
+    formData.append('order_id', 101);
+    formData.append('amount', 1500);
+    formData.append('method', 'online');
+    formData.append('file', fileInput.files[0]); // The actual file object
+
+    // Send using axios or fetch without setting Content-Type manually
+    axios.post('/api/orders/payment', formData);
+    ```
+
+### 3. The Order Lifecycle (State Machine)
+The order moves through these statuses in the database. The frontend should update the UI accordingly:
+1.  **`pending`**: Order created, location not yet entered.
+2.  **`location_verified`**: Address is good. Ready for payment.
+3.  **`awaiting_approval`**: Online payment submitted, waiting for Admin.
+4.  **`paid`**: Cash payment confirmed.
+5.  **`accepted`**: Admin has approved the order. Kitchen is cooking.
+6.  **`rejected`**: Admin rejected the order (removed from active view).
+
+### 4. displaying Charts
+*   For the Admin Dashboard, endpoint **5** (`/reports/sales`) returns `graph_data` array.
+*   Map `date` to the **X-Axis** (Labels).
+*   Map `sales` to the **Y-Axis** (Data points).
+*   Compatible with libraries like **Chart.js** or **Recharts**.
 
