@@ -1,0 +1,269 @@
+.reports-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.reports-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.revenue-report-btn {
+  background: #ffb800;
+  color: #03081f;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.revenue-report-btn:hover {
+  background: #e0a000;
+}
+
+.date-range-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.date-input {
+  padding: 0.875rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
+  color: #03081f;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.date-input:focus {
+  border-color: #ffb800;
+}
+
+.date-separator {
+  color: #666;
+  font-weight: 500;
+}
+
+.generate-report-btn {
+  background: #ffb800;
+  color: #03081f;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.generate-report-btn:hover {
+  background: #e0a000;
+}
+
+.charts-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chart-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #03081f;
+  margin: 0 0 1.5rem 0;
+}
+
+.donut-chart-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.donut-chart {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.donut-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.donut-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.donut-total {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.donut-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #03081f;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: #03081f;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.chart-tab {
+  background: transparent;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.chart-tab:hover {
+  color: #03081f;
+}
+
+.chart-tab.active {
+  color: #03081f;
+  border-bottom-color: #ffb800;
+  background: rgba(255, 184, 0, 0.1);
+}
+
+.line-chart-container {
+  width: 100%;
+  height: 250px;
+  overflow: visible;
+}
+
+.line-chart-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.reservations-table-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.reservations-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reservations-table thead {
+  background: #f5f5f5;
+}
+
+.reservations-table th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #03081f;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.reservations-table td {
+  padding: 1rem;
+  font-size: 0.95rem;
+  color: #03081f;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.reservations-table tbody tr.even {
+  background: white;
+}
+
+.reservations-table tbody tr.odd {
+  background: #fffef5;
+}
+
+.reservations-table tbody tr:hover {
+  background: #fff8e1;
+}
+
+@media (max-width: 1024px) {
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+
+  .donut-chart-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .reports-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-range-selector {
+    flex-direction: column;
+  }
+
+  .reservations-table {
+    font-size: 0.875rem;
+  }
+
+  .reservations-table th,
+  .reservations-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
