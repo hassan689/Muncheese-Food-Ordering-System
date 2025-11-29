@@ -1,0 +1,127 @@
+.popular-items {
+  font-family: 'Poppins', sans-serif;
+  background: white;
+  padding: 5rem 2rem;
+  min-height: 700px;
+}
+
+.popular-items-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 2.7rem;
+  font-weight: bold;
+  color: #212121;
+  text-align: center;
+  margin-bottom: 5rem;
+  line-height: 1.12;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.item-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0px 5px 10px rgba(255, 174, 0, 0.26), 0px 20px 40px rgba(255, 174, 0, 0.29);
+  transition: transform 0.3s;
+}
+
+.item-card:hover {
+  transform: translateY(-5px);
+}
+
+.item-image {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #ffae00 0%, #ffcd1e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.item-image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.item-card:hover .item-image-img {
+  transform: scale(1.05);
+}
+
+.item-info {
+  padding: 1.5rem;
+}
+
+.item-name {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #424242;
+  margin-bottom: 0.5rem;
+}
+
+.item-location {
+  color: #ffae00;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-location .location-icon {
+  font-size: 1.2rem;
+}
+
+.item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-price {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #212121;
+}
+
+.order-btn {
+  background: #FFB800;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  box-shadow: 0px 5px 10px rgba(253, 114, 92, 0.22), 0px 20px 40px rgba(250, 99, 35, 0.24);
+}
+
+.order-btn:hover {
+  background: #ff9f00;
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .items-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+

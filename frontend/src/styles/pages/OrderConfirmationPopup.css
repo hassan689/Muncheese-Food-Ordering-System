@@ -1,0 +1,55 @@
+.order-confirmation-popup-page {
+  font-family: 'Poppins', sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffc224;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.confirmation-popup-content {
+  text-align: center;
+  padding: 40px;
+}
+
+.confirmation-image {
+  width: 665px;
+  height: 551px;
+  margin: 0 auto 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmation-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.confirmation-title {
+  font-size: 96px;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .confirmation-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+  }
+
+  .confirmation-title {
+    font-size: 48px;
+  }
+}
+

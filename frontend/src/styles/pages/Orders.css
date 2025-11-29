@@ -1,0 +1,37 @@
+.orders {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.orders h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #03081f;
+}
+
+.orders p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.menu-btn {
+  padding: 15px 30px;
+  background: #ffb800;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.menu-btn:hover {
+  opacity: 0.9;
+}
+
+
+
+

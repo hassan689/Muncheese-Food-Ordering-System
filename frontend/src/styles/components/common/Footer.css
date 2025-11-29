@@ -1,0 +1,229 @@
+.footer {
+  font-family: 'Poppins', sans-serif;
+  background-color: #2d2d2d;
+  color: #b0b0b0;
+  padding: 4rem 2rem 2rem;
+}
+
+.footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Top Cities Section */
+.footer-top-cities {
+  margin-bottom: 2rem;
+}
+
+.cities-heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #e0e0e0;
+  margin-bottom: 1.5rem;
+}
+
+.cities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem 2rem;
+}
+
+.city-link {
+  color: #b0b0b0;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+
+.city-link:hover {
+  color: #ffb800;
+}
+
+/* Divider */
+.footer-divider {
+  height: 1px;
+  background: #4a4a4a;
+  margin: 2rem 0;
+}
+
+/* Bottom Section */
+.footer-bottom-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.footer-links-section {
+  display: flex;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.footer-link-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-column-heading {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #e0e0e0;
+  margin: 0 0 0.5rem 0;
+}
+
+.footer-link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-link-list a {
+  color: #b0b0b0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.footer-link-list a:hover {
+  color: #ffb800;
+}
+
+/* Social & Newsletter Section */
+.footer-social-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 300px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #3a3a3a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b0b0b0;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.social-icon:hover {
+  background: #ffb800;
+  color: #2d2d2d;
+  transform: translateY(-2px);
+}
+
+.social-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.newsletter-text {
+  font-size: 0.9rem;
+  color: #b0b0b0;
+  margin: 0;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.newsletter-input-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #3a3a3a;
+  border-radius: 8px;
+  padding: 0 1rem;
+}
+
+.envelope-icon {
+  color: #b0b0b0;
+  margin-right: 0.5rem;
+}
+
+.newsletter-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  padding: 0.75rem 0;
+  outline: none;
+}
+
+.newsletter-input::placeholder {
+  color: #888;
+}
+
+.subscribe-btn {
+  background: linear-gradient(135deg, #ffb800 0%, #ff9800 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.subscribe-btn:hover {
+  background: linear-gradient(135deg, #ff9800 0%, #ffb800 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
+}
+
+@media (max-width: 1024px) {
+  .footer-bottom-section {
+    flex-direction: column;
+  }
+
+  .footer-links-section {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 3rem 1.5rem 2rem;
+  }
+
+  .cities-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem 1rem;
+  }
+
+  .footer-links-section {
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .footer-social-section {
+    width: 100%;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .subscribe-btn {
+    width: 100%;
+  }
+}

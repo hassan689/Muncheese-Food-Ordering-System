@@ -1,0 +1,545 @@
+.order-tracking-page {
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 32px 72px;
+}
+
+.order-tracking-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.order-tracking-header {
+  margin-bottom: 32px;
+}
+
+.order-tracking-header h1 {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 8px;
+}
+
+.order-number {
+  font-size: 16px;
+  color: #666;
+}
+
+.order-tracking-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.tracking-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.delivery-time-card {
+  background: #ffb800;
+  border-radius: 20px;
+  padding: 24px 32px;
+  box-shadow: 5px 5px 34px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.delivery-time-icon {
+  width: 64px;
+  height: 64px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delivery-time-icon img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.delivery-time-info {
+  flex: 1;
+}
+
+.delivery-time-label {
+  font-size: 14px;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.delivery-time-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.delivery-time-note {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.order-status-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px 32px;
+  box-shadow: 5px 5px 34px rgba(0, 0, 0, 0.1);
+}
+
+.status-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 24px;
+}
+
+.status-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.status-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.status-item:last-child {
+  padding-bottom: 0;
+}
+
+.status-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.status-icon.completed {
+  background: #ffb800;
+}
+
+.status-icon.pending {
+  background: #e0e0e0;
+}
+
+.status-icon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.status-content {
+  flex: 1;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.status-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+}
+
+.status-item.pending .status-name {
+  color: #999;
+}
+
+.status-time {
+  font-size: 14px;
+  color: #666;
+}
+
+.status-item.pending .status-time {
+  color: #999;
+}
+
+.status-description {
+  font-size: 14px;
+  color: #666;
+}
+
+.status-item.pending .status-description {
+  color: #999;
+}
+
+.status-connector {
+  position: absolute;
+  left: 24px;
+  top: 48px;
+  width: 2px;
+  height: 48px;
+  background: #ffb800;
+}
+
+.status-connector:not(.completed) {
+  background: #e0e0e0;
+}
+
+.delivery-info-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px 32px;
+  box-shadow: 5px 5px 34px rgba(0, 0, 0, 0.1);
+}
+
+.info-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 24px;
+}
+
+.delivery-address {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 0.8px solid #e0e0e0;
+}
+
+.address-icon {
+  width: 48px;
+  height: 48px;
+  background: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.address-icon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.address-details {
+  flex: 1;
+}
+
+.address-label {
+  font-size: 14px;
+  color: black;
+  margin-bottom: 8px;
+}
+
+.address-text {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.delivery-driver {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 0.8px solid #e0e0e0;
+}
+
+.driver-avatar {
+  width: 56px;
+  height: 56px;
+  background: #ffb800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.driver-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.driver-details {
+  flex: 1;
+}
+
+.driver-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 4px;
+}
+
+.driver-role {
+  font-size: 14px;
+  color: #666;
+}
+
+.driver-contact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.call-driver-btn {
+  width: 48px;
+  height: 48px;
+  background: #ffb800;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.call-driver-btn img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.driver-phone {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+}
+
+.order-details-sidebar {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 5px 5px 34px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  position: sticky;
+  top: 32px;
+}
+
+.order-details-header {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 0.8px solid #e0e0e0;
+}
+
+.order-details-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 8px;
+}
+
+.restaurant-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 4px;
+}
+
+.order-placed-time {
+  font-size: 14px;
+  color: #666;
+}
+
+.order-items-list {
+  margin-bottom: 24px;
+}
+
+.order-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.order-item-quantity {
+  width: 48px;
+  height: 48px;
+  background: #ffb800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.order-item-info {
+  flex: 1;
+}
+
+.order-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 4px;
+}
+
+.order-item-notes {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.order-item-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffb800;
+}
+
+.order-summary {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 0.8px solid #e0e0e0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: black;
+  margin-bottom: 16px;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 0.8px solid #e0e0e0;
+}
+
+.summary-total span:first-child {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+}
+
+.total-amount {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffb800;
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 0.8px solid #e0e0e0;
+}
+
+.payment-icon {
+  width: 40px;
+  height: 40px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.payment-details {
+  flex: 1;
+}
+
+.payment-label {
+  font-size: 14px;
+  color: black;
+  margin-bottom: 4px;
+}
+
+.payment-type {
+  font-size: 14px;
+  color: #666;
+}
+
+.need-help-btn {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.need-help-btn:hover {
+  background: #f5f5f5;
+}
+
+.tracking-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.checkout-btn,
+.order-tracking-btn {
+  height: 37px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.checkout-btn {
+  background: #ffb800;
+  color: white;
+}
+
+.checkout-btn:hover {
+  background: #e0a000;
+}
+
+.order-tracking-btn {
+  background: #ffb800;
+  color: white;
+}
+
+.order-tracking-btn.active {
+  background: #ffb800;
+}
+
+@media (max-width: 1024px) {
+  .order-tracking-content {
+    grid-template-columns: 1fr;
+  }
+
+  .order-details-sidebar {
+    position: relative;
+    top: 0;
+  }
+}
+
