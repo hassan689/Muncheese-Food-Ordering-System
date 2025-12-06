@@ -1,72 +1,163 @@
-import { useState } from 'react'
-import AdminLayout from '../../components/admin/AdminLayout'
+import { useState, useEffect } from 'react'
+import AdminLayout from '../../layouts/admin/Layout'
+import DonutChart from '../../components/admin/Report/DonutChart'
+import LineChart from '../../components/admin/Report/LineChart'
+import OrdersTable from '../../components/admin/Report/OrdersTable'
 import '../../styles/pages/admin/Reports.css'
 
+const fetchReportData = () => {
+  return {
+    chartData: {
+      confirmed: 80,
+      cancelled: 20
+    },
+    trendData: {
+      confirmed: [
+        { month: 'JAN', value: 3000 },
+        { month: 'FEB', value: 3500 },
+        { month: 'MAR', value: 4000 },
+        { month: 'APR', value: 4500 },
+        { month: 'MAY', value: 5000 },
+        { month: 'JUN', value: 5200 },
+        { month: 'JUL', value: 5400 },
+        { month: 'AUG', value: 5600 },
+        { month: 'SEP', value: 5800 },
+        { month: 'OCT', value: 6000 },
+        { month: 'NOV', value: 6200 },
+        { month: 'DEC', value: 6500 }
+      ],
+      cancelled: [
+        { month: 'JAN', value: 1500 },
+        { month: 'FEB', value: 1600 },
+        { month: 'MAR', value: 1400 },
+        { month: 'APR', value: 1700 },
+        { month: 'MAY', value: 1800 },
+        { month: 'JUN', value: 1900 },
+        { month: 'JUL', value: 2000 },
+        { month: 'AUG', value: 1950 },
+        { month: 'SEP', value: 2100 },
+        { month: 'OCT', value: 2200 },
+        { month: 'NOV', value: 2300 },
+        { month: 'DEC', value: 2400 }
+      ]
+    },
+    orders: [
+      {
+        id: '#12354564',
+        customerName: 'Watson Joyce',
+        phone: '+1 (123) 123 4654',
+        orderDate: '28. 03. 2024',
+        total: '$250.00'
+      },
+      {
+        id: '#12354565',
+        customerName: 'Sarah Johnson',
+        phone: '+1 (123) 456 7890',
+        orderDate: '29. 03. 2024',
+        total: '$180.00'
+      },
+      {
+        id: '#12354566',
+        customerName: 'Michael Brown',
+        phone: '+1 (123) 987 6543',
+        orderDate: '30. 03. 2024',
+        total: '$320.00'
+      },
+      {
+        id: '#12354567',
+        customerName: 'Emily Davis',
+        phone: '+1 (123) 111 2222',
+        orderDate: '31. 03. 2024',
+        total: '$275.00'
+      },
+      {
+        id: '#12354568',
+        customerName: 'David Wilson',
+        phone: '+1 (123) 333 4444',
+        orderDate: '01. 04. 2024',
+        total: '$195.00'
+      }
+    ]
+  };
+};
+
 const Reports = () => {
+  // UI State
   const [activeTab, setActiveTab] = useState('Confirmed')
   const [startDate, setStartDate] = useState('2024-04-01')
   const [endDate, setEndDate] = useState('2024-04-08')
+  
+  // Data State
+  const [chartData, setChartData] = useState(null)
+  const [trendData, setTrendData] = useState(null)
+  const [orders, setOrders] = useState([])
+  
+  // Loading and Error State
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const reservations = [
-    {
-      id: '#12354564',
-      customerName: 'Watson Joyce',
-      phone: '+1 (123) 123 4654',
-      reservationDate: '28. 03. 2024',
-      checkIn: '03:18 PM',
-      checkOut: '05:00 PM',
-      total: '$250.00'
-    },
-    {
-      id: '#12354564',
-      customerName: 'Watson Joyce',
-      phone: '+1 (123) 123 4654',
-      reservationDate: '28. 03. 2024',
-      checkIn: '03:18 PM',
-      checkOut: '05:00 PM',
-      total: '$250.00'
-    },
-    {
-      id: '#12354564',
-      customerName: 'Watson Joyce',
-      phone: '+1 (123) 123 4654',
-      reservationDate: '28. 03. 2024',
-      checkIn: '03:18 PM',
-      checkOut: '05:00 PM',
-      total: '$250.00'
-    },
-    {
-      id: '#12354564',
-      customerName: 'Watson Joyce',
-      phone: '+1 (123) 123 4654',
-      reservationDate: '28. 03. 2024',
-      checkIn: '03:18 PM',
-      checkOut: '05:00 PM',
-      total: '$250.00'
-    },
-    {
-      id: '#12354564',
-      customerName: 'Watson Joyce',
-      phone: '+1 (123) 123 4654',
-      reservationDate: '28. 03. 2024',
-      checkIn: '03:18 PM',
-      checkOut: '05:00 PM',
-      total: '$250.00'
+  // Fetch initial data on component mount
+  useEffect(() => {
+    loadReportData()
+  }, []) // Empty array = runs once on mount
+
+  // Function to load all report data
+  const loadReportData = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      // Fetch data from API (or use dummy data for now)
+      const data = await fetchReportData();
+      
+      // Update all states with fetched data
+      setChartData(data.chartData)
+      setTrendData(data.trendData)
+      setOrders(data.orders)
+      
+    } catch (err) {
+      setError(err.message)
+      console.error('Error loading report data:', err)
+    } finally {
+      setLoading(false)
     }
-  ]
-
-  const chartData = {
-    confirmed: 80,
-    awaited: 50,
-    cancelled: 30,
-    failed: 32
   }
 
-  const total = chartData.confirmed + chartData.awaited + chartData.cancelled + chartData.failed
+  // Handle generate report button click
+  const handleGenerateReport = () => {
+    loadReportData()
+  }
+
+  // Handle tab change for trend chart
+  const handleTabChange = (tab) => {
+    setActiveTab(tab)
+  }
+
+  if (loading) {
+    return (
+      <AdminLayout title="Reports">
+        <div className="reports-loading">
+          <p>Loading reports...</p>
+        </div>
+      </AdminLayout>
+    )
+  }
+
+  if (error) {
+    return (
+      <AdminLayout title="Reports">
+        <div className="reports-error">
+          <p>Error loading reports: {error}</p>
+          <button onClick={loadReportData}>Retry</button>
+        </div>
+      </AdminLayout>
+    )
+  }
 
   return (
     <AdminLayout title="Reports">
       <div className="reports-page">
+        {/* Controls Section */}
         <div className="reports-controls">
           <button className="revenue-report-btn">Revenue Report</button>
           <div className="date-range-selector">
@@ -83,202 +174,33 @@ const Reports = () => {
               onChange={(e) => setEndDate(e.target.value)}
               className="date-input"
             />
-            <button className="generate-report-btn">Generate Report</button>
+            <button 
+              className="generate-report-btn"
+              onClick={handleGenerateReport}
+            >
+              Generate Report
+            </button>
           </div>
         </div>
 
+        {/* Charts Section */}
         <div className="charts-section">
-          <div className="chart-card reservation-chart">
-            <h3 className="chart-title">Total Reservation</h3>
-            <div className="donut-chart-container">
-              <div className="donut-chart">
-                <svg viewBox="0 0 120 120" className="donut-svg">
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="50"
-                    fill="none"
-                    stroke="#f5f5dc"
-                    strokeWidth="20"
-                  />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="50"
-                    fill="none"
-                    stroke="#d4a574"
-                    strokeWidth="20"
-                    strokeDasharray={`${(chartData.awaited / total) * 314} 314`}
-                    strokeDashoffset="0"
-                    transform="rotate(-90 60 60)"
-                  />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="50"
-                    fill="none"
-                    stroke="#ffb800"
-                    strokeWidth="20"
-                    strokeDasharray={`${(chartData.cancelled / total) * 314} 314`}
-                    strokeDashoffset={`-${(chartData.awaited / total) * 314}`}
-                    transform="rotate(-90 60 60)"
-                  />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="50"
-                    fill="none"
-                    stroke="#ff9800"
-                    strokeWidth="20"
-                    strokeDasharray={`${(chartData.failed / total) * 314} 314`}
-                    strokeDashoffset={`-${((chartData.awaited + chartData.cancelled) / total) * 314}`}
-                    transform="rotate(-90 60 60)"
-                  />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="50"
-                    fill="none"
-                    stroke="#333"
-                    strokeWidth="20"
-                    strokeDasharray={`${(chartData.confirmed / total) * 314} 314`}
-                    strokeDashoffset={`-${((chartData.awaited + chartData.cancelled + chartData.failed) / total) * 314}`}
-                    transform="rotate(-90 60 60)"
-                  />
-                </svg>
-                <div className="donut-center">
-                  <span className="donut-total">Total</span>
-                  <span className="donut-value">{total}</span>
-                </div>
-              </div>
-              <div className="chart-legend">
-                <div className="legend-item">
-                  <span className="legend-color" style={{ background: '#f5f5dc' }}></span>
-                  <span>Confirmed</span>
-                </div>
-                <div className="legend-item">
-                  <span className="legend-color" style={{ background: '#d4a574' }}></span>
-                  <span>Awaited</span>
-                </div>
-                <div className="legend-item">
-                  <span className="legend-color" style={{ background: '#ffb800' }}></span>
-                  <span>Cancelled</span>
-                </div>
-                <div className="legend-item">
-                  <span className="legend-color" style={{ background: '#ff9800' }}></span>
-                  <span>Failed</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="chart-card trend-chart">
-            <div className="chart-tabs">
-              {['Confirmed', 'Awaited', 'Cancelled', 'Failed'].map((tab) => (
-                <button
-                  key={tab}
-                  className={`chart-tab ${activeTab === tab ? 'active' : ''}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-            <div className="line-chart-container">
-              <svg viewBox="0 0 400 200" className="line-chart-svg">
-                <defs>
-                  <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#ffb800" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#ffb800" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <g className="chart-grid">
-                  {[0, 1, 2, 3, 4, 5].map((i) => (
-                    <line
-                      key={i}
-                      x1="40"
-                      y1={160 - i * 30}
-                      x2="380"
-                      y2={160 - i * 30}
-                      stroke="#e0e0e0"
-                      strokeWidth="1"
-                    />
-                  ))}
-                </g>
-                <g className="chart-labels">
-                  {['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'].map((month, i) => (
-                    <text
-                      key={month}
-                      x={40 + i * 30}
-                      y={190}
-                      fontSize="10"
-                      fill="#666"
-                      textAnchor="middle"
-                    >
-                      {month}
-                    </text>
-                  ))}
-                  {[0, 1, 2, 3, 4, 5].map((i) => (
-                    <text
-                      key={i}
-                      x="20"
-                      y={165 - i * 30}
-                      fontSize="10"
-                      fill="#666"
-                      textAnchor="end"
-                    >
-                      {i}k
-                    </text>
-                  ))}
-                </g>
-                <path
-                  d="M 40 130 L 70 120 L 100 110 L 130 100 L 160 90 L 190 85 L 220 80 L 250 75 L 280 70 L 310 65 L 340 60 L 370 55"
-                  fill="none"
-                  stroke="#ffb800"
-                  strokeWidth="2"
-                />
-                <path
-                  d="M 40 130 L 70 120 L 100 110 L 130 100 L 160 90 L 190 85 L 220 80 L 250 75 L 280 70 L 310 65 L 340 60 L 370 55 L 370 160 L 40 160 Z"
-                  fill="url(#areaGradient)"
-                />
-                <circle cx="280" cy="70" r="4" fill="#ffb800" />
-              </svg>
-            </div>
-          </div>
+          {/* Donut Chart */}
+          <DonutChart data={chartData} />
+          
+          {/* Line Chart */}
+          <LineChart 
+            data={trendData}
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+          />
         </div>
 
-        <div className="reservations-table-card">
-          <table className="reservations-table">
-            <thead>
-              <tr>
-                <th>Reservation ID</th>
-                <th>Customer Name</th>
-                <th>Phone number</th>
-                <th>Reservation Date</th>
-                <th>Check In</th>
-                <th>Check Out</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservations.map((reservation, index) => (
-                <tr key={index} className={index % 2 === 0 ? 'even' : 'odd'}>
-                  <td>{reservation.id}</td>
-                  <td>{reservation.customerName}</td>
-                  <td>{reservation.phone}</td>
-                  <td>{reservation.reservationDate}</td>
-                  <td>{reservation.checkIn}</td>
-                  <td>{reservation.checkOut}</td>
-                  <td>{reservation.total}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {/* Orders Table */}
+        <OrdersTable orders={orders} />
       </div>
     </AdminLayout>
   )
 }
 
 export default Reports
-

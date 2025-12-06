@@ -1,0 +1,56 @@
+/* components/admin/charts/LineChart.css */
+/* Line Chart Component Styles */
+
+/* Tabs */
+.chart-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.chart-tab {
+  background: transparent;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.chart-tab:hover {
+  color: #03081f;
+}
+
+.chart-tab.active {
+  color: #03081f;
+  border-bottom-color: #ffb800;
+  background: rgba(255, 184, 0, 0.1);
+}
+
+/* Chart Container */
+.line-chart-container {
+  width: 100%;
+  height: 250px;
+  overflow: visible;
+}
+
+.line-chart-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Chart Elements */
+.chart-grid line {
+  stroke: #e0e0e0;
+  stroke-width: 1;
+}
+
+.chart-labels text {
+  font-size: 10px;
+  fill: #666;
+  font-family: 'Poppins', sans-serif;
+}

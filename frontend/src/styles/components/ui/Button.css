@@ -7,6 +7,7 @@
   transition: all 0.3s;
 }
 
+/* Client Side Properties for Button */
 .btn-primary {
   background-color: #333;
   color: white;
@@ -39,6 +40,33 @@
   cursor: not-allowed;
 }
 
+/* Admin Side Properties for Button */
 
+.btn-adminPrimary {
+  background-color: #FFB800;
+  color: black;
+}
+
+.btn-adminPrimary:hover:not(:disabled) {
+  background-color: #fbe3a5ff;
+}
+
+.btn-adminSecondary {
+  background-color: #FFFBE9;
+  color: black;
+}
+
+.btn-adminSecondary:hover:not(:disabled) {
+  background-color: #fbe3a5ff;
+}
+
+.btn-adminDanger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-adminDanger:hover:not(:disabled) {
+  background-color: #c82333;
+}
 
 

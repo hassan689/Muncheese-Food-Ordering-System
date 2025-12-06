@@ -1,0 +1,141 @@
+.orders-table-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Header */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.table-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #03081f;
+  margin: 0;
+}
+
+.table-count {
+  font-size: 0.875rem;
+  color: #666;
+  background: #f5f5f5;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Table Styles */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table thead {
+  background: #f5f5f5;
+}
+
+.orders-table th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #03081f;
+  border-bottom: 2px solid #e0e0e0;
+  white-space: nowrap;
+}
+
+/* Sortable Columns */
+.orders-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.orders-table th.sortable:hover {
+  background: #ebebeb;
+}
+
+/* Table Body */
+.orders-table td {
+  padding: 1rem;
+  font-size: 0.95rem;
+  color: #03081f;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Alternating Row Colors */
+.orders-table tbody tr.even {
+  background: white;
+}
+
+.orders-table tbody tr.odd {
+  background: #fffef5;
+}
+
+.orders-table tbody tr:hover {
+  background: #fff8e1;
+  transition: background 0.2s;
+}
+
+/* Special Column Styles */
+.reservation-id {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: #666;
+}
+
+.customer-name {
+  font-weight: 500;
+  color: #03081f;
+}
+
+.total-amount {
+  font-weight: 600;
+  color: #ffb800;
+}
+
+/* Empty State */
+.no-data {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .orders-table {
+    font-size: 0.875rem;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  /* Make table scrollable on mobile */
+  .table-wrapper {
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .orders-table {
+    min-width: 800px;
+  }
+}

@@ -1,0 +1,113 @@
+.overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.overview-title h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 24px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legend-dot.sales {
+  background: #fbbf24;
+}
+
+.legend-dot.revenue {
+  background: #111827;
+}
+
+.legend-label {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.period-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.chart-container {
+  position: relative;
+  height: 320px;
+  margin-top: 24px;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 100%;
+  padding-left: 40px;
+  padding-bottom: 30px;
+}
+
+.y-axis {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.chart-grid {
+  position: absolute;
+  left: 40px;
+  right: 0;
+  top: 0;
+  bottom: 30px;
+}
+
+.grid-line {
+  border-top: 1px solid #f3f4f6;
+}
+
+.x-axis {
+  position: absolute;
+  left: 40px;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.chart-svg {
+  position: absolute;
+  left: 40px;
+  right: 0;
+  top: 0;
+  bottom: 30px;
+  width: calc(100% - 40px);
+  height: calc(100% - 30px);
+}
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -34,10 +34,14 @@ frontend/
 ├── public/          # Static assets
 ├── src/
 │   ├── components/  # Reusable components
+│   │   ├── admin/   # Admin components
 │   │   ├── common/  # Common components (Navbar, Footer)
+│   │   ├── landing/ # Landing components (Navbar, Footer)
 │   │   └── ui/      # UI components (Button, Input, Card)
 │   ├── pages/       # Page components
 │   │   └── admin/   # Admin pages
+│   ├── styles/      # CSS styles
+│   │   └── admin/   # Admin pages styles
 │   ├── services/    # API services
 │   ├── hooks/       # Custom React hooks
 │   ├── context/     # React Context providers

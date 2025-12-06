@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layout from './layouts/Layout'
+import AdminLayout from './layouts/admin/Layout'
 import Home from './pages/Home'
 import Register from './pages/Register'
 import Login from './pages/Login'
@@ -14,16 +15,18 @@ import OrderTracking from './pages/OrderTracking'
 import Contact from './pages/Contact'
 import Feedback from './pages/Feedback'
 import TestPage from './pages/TestPage'
-import AdminDashboard from './pages/admin/AdminDashboard'
-import Customers from './pages/admin/Customers'
-import Reports from './pages/admin/Reports'
+import AdminDashboard from './pages/admin/Dashboard'
+import AdminMenu from './pages/admin/Menu'
+import AdminOrders from './pages/admin/Orders'
+import AdminReports from './pages/admin/Reports'
 import ProtectedRoute from './components/common/ProtectedRoute'
 import './styles/App.css'
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
+      <Routes>
+        {/* Public Pages with Main Layout */}
+        <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
@@ -32,17 +35,18 @@ function App() {
           <Route path="/menu" element={<Menu />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
-          <Route path="/order-confirmation-popup" element={<OrderConfirmationPopup />} />
           <Route path="/location-entry" element={<LocationEntry />} />
           <Route path="/order-tracking" element={<OrderTracking />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Feedback />} />
-          <Route path="/test" element={<TestPage />} />
+        </Route>
+
+        {/* Admin Pages with Admin Layout */}
           <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/customers" element={<Customers />} />
-          <Route path="/admin/reports" element={<Reports />} />
-        </Routes>
-      </Layout>
+          <Route path="/admin/menu" element={<AdminMenu />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
+      </Routes>
     </Router>
   )
 }

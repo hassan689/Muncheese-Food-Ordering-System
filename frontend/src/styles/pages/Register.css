@@ -43,7 +43,8 @@
   border-radius: 4px;
 }
 
-button {
+/* Hassan kindly in ko specific kar lena mujhay masla a rha tha admin side pa*/
+/* button {
   width: 100%;
   padding: 0.75rem;
   background-color: #333;
@@ -62,5 +63,5 @@ button:hover:not(:disabled) {
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
+} */
 
