@@ -33,19 +33,7 @@ const Contact = () => {
 
   return (
     <div className="contact-page">
-      <div className="contact-header">
-        <div className="contact-nav">
-          <button className="nav-btn" onClick={() => navigate('/checkout')}>
-            Checkout
-          </button>
-          <button className="nav-btn" onClick={() => navigate('/order-tracking')}>
-            Order Tracking
-          </button>
-          <button className="nav-btn" onClick={() => navigate('/menu')}>
-            Menu
-          </button>
-        </div>
-      </div>
+
 
       <div className="contact-container">
         <div className="contact-content">

@@ -17,6 +17,7 @@ import TestPage from './pages/TestPage'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import Customers from './pages/admin/Customers'
 import Reports from './pages/admin/Reports'
+import AdminOrders from './pages/admin/Orders'
 import ProtectedRoute from './components/common/ProtectedRoute'
 import './styles/App.css'
 function App() {
@@ -34,12 +35,13 @@ function App() {
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/order-confirmation-popup" element={<OrderConfirmationPopup />} />
           <Route path="/location-entry" element={<LocationEntry />} />
-          <Route path="/order-tracking" element={<OrderTracking />} />
+          <Route path="/order-tracking/:orderId?" element={<OrderTracking />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/test" element={<TestPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/customers" element={<Customers />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
           <Route path="/admin/reports" element={<Reports />} />
         </Routes>
       </Layout>

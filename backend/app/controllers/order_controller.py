@@ -55,6 +55,45 @@ class OrderController:
             return jsonify({"error": str(e)}), 400
         
     @staticmethod
+    def get_order_details(order_id):
+        """Get order details by ID (for customers)"""
+        try:
+            order_data = OrderService.get_order_details(order_id)
+            return jsonify(order_data), 200
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 404
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @staticmethod
+    def get_customer_orders():
+        """Get all orders for the current customer"""
+        try:
+            customer_id = request.args.get('customer_id') or request.headers.get('customer-id')
+            if not customer_id:
+                return jsonify({"error": "Customer ID required"}), 400
+            
+            orders = OrderService.get_customer_orders(int(customer_id))
+            return jsonify([o.to_dict() for o in orders]), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @staticmethod
+    def update_order(order_id):
+        """Update order (status, total_amount, etc.)"""
+        try:
+            data = request.json
+            if not data:
+                return jsonify({"error": "No data provided"}), 400
+            
+            result = OrderService.update_order(order_id, data)
+            return jsonify(result), 200
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 400
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @staticmethod
     def get_sales_report():
         """
         GET /api/admin/reports/sales?type=monthly

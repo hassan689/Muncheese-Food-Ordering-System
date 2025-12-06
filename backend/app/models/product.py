@@ -7,7 +7,7 @@ class Product(db.Model):
     product_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    category = db.Column(db.String(50), nullable=False)  # e.g., "Pizza", "Burgers", "Drinks", "Desserts"
+    category = db.Column(db.String(50), nullable=False)  
     
     # Relationship to ProductItems
     items = db.relationship("ProductItem", back_populates="product", cascade="all, delete-orphan")
@@ -37,6 +37,7 @@ class ProductItem(db.Model):
             "item_id": self.item_id,
             "product_id": self.product_id,
             "product_name": self.product.name if self.product else None,
+            "description": self.product.description if self.product else None,
             "category": self.product.category if self.product else None,
             "size": self.size,
             "price": float(self.price) if self.price else None,
