@@ -30,14 +30,6 @@ const AdminDashboard = () => {
             trendValue="+8.2%"
             chart={[60, 75, 70, 85, 80, 90, 85, 95, 88, 92, 85, 90]}
           />
-          <AdminStatCard
-            title="Table Occupancy"
-            value="25 Tables"
-            icon={TableIcon}
-            trend="up"
-            trendValue="+5.4%"
-            chart={[70, 80, 75, 85, 78, 90, 85, 92, 88, 95, 90, 94]}
-          />
         </div>
 
         <AdminOverviewChart />

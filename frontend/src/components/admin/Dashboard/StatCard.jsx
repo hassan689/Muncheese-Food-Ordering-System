@@ -12,7 +12,7 @@ const AdminStatCard = ({
   color = ADMIN_COLORS.Secondary,
 }) => {
   return (
-    <Card className="stat-card" style={{ backgroundColor: color }}>
+    <Card className="stat-card">
       <div className="stat-header">
         <div className="stat-info">
           <h3>{title}</h3>

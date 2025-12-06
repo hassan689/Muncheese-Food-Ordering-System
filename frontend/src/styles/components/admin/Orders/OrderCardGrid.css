@@ -1,0 +1,27 @@
+       /* Orders Grid */
+        .orders-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          gap: 20px;
+          max-height: calc(100vh - 250px);
+          overflow-y: auto;
+          padding-right: 10px;
+        }
+
+        .orders-grid::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .orders-grid::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+
+        .orders-grid::-webkit-scrollbar-thumb {
+          background: #FFC107;
+          border-radius: 10px;
+        }
+
+        .orders-grid::-webkit-scrollbar-thumb:hover {
+          background: #FFB300;
+        }

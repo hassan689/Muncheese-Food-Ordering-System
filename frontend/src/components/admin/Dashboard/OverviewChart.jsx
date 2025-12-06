@@ -53,7 +53,7 @@ const AdminOverviewChart = ({ color = ADMIN_COLORS.Secondary, marginTop = "120px
   const handleMouseLeave = () => setActiveX(null);
 
   return (
-    <Card style={{ backgroundColor: color, marginTop }}>
+    <Card style={{ marginTop }}>
       <div className="overview-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div className="overview-title">
           <h2>Overview</h2>
