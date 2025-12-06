@@ -18,3 +18,18 @@ def add_location(order_id):
 @order_bp.route("/payment", methods=["POST"])
 def make_payment():
     return PaymentController.make_payment()
+
+# Get order details by ID (for customers)
+@order_bp.route("/<int:order_id>", methods=["GET"])
+def get_order_details(order_id):
+    return OrderController.get_order_details(order_id)
+
+# Get all orders for a customer
+@order_bp.route("/customer", methods=["GET"])
+def get_customer_orders():
+    return OrderController.get_customer_orders()
+
+# Update order (general update)
+@order_bp.route("/<int:order_id>", methods=["PUT"])
+def update_order(order_id):
+    return OrderController.update_order(order_id)

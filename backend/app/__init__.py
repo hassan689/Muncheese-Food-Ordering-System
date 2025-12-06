@@ -1,11 +1,26 @@
 
 
 from flask import Flask
+from flask_cors import CORS
 from .extensions import db, migrate
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object('config.Config')
+    
+    # Enable CORS for all routes
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization", "user-id"]
+        },
+        r"/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization", "user-id"]
+        }
+    })
 
     # Initialize Plugins
     db.init_app(app)
@@ -27,6 +42,11 @@ def create_app():
         from .routes import register_blueprints
         register_blueprints(app)
 
-        db.create_all() # Optional if using migrations, but good for safety
+        # Try to create tables, but don't crash if database is not available
+        try:
+            db.create_all() # Optional if using migrations, but good for safety
+        except Exception as e:
+            print(f"[WARNING] Database initialization warning: {str(e)}")
+            print("   App will continue, but database features may not work.")
 
     return app

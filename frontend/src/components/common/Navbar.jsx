@@ -39,6 +39,7 @@ const Navbar = () => {
           {isAdmin && (
             <>
               <li><Link to="/admin">Admin</Link></li>
+              <li><Link to="/admin/orders">Orders</Link></li>
               <li><Link to="/admin/customers">Customers</Link></li>
             </>
           )}

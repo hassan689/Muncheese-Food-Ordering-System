@@ -1,35 +1,84 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { feedbackService } from '../services/feedbackService'
 import weblogo from '../assets/images/logo/weblogo.png'
 import '../styles/pages/Feedback.css'
 
 const Feedback = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const [rating, setRating] = useState(0)
   const [hoveredRating, setHoveredRating] = useState(0)
   const [feedback, setFeedback] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [orderData, setOrderData] = useState(null)
 
-  const orderItems = [
-    { id: 1, name: '12" Vegitarian Pizza', price: 500, quantity: 1 },
-    { id: 2, name: '17" Tandoori Pizza', price: 1000, quantity: 1 },
-    { id: 3, name: '12" Vegitarian Pizza', price: 800, quantity: 1 }
-  ]
+  // Get order data from location state
+  useEffect(() => {
+    if (location.state?.orderData) {
+      setOrderData(location.state.orderData)
+    }
+  }, [location])
 
-  const subtotal = orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-  const discount = 3.00
-  const deliveryFee = 2.50
-  const total = subtotal - discount + deliveryFee
+  // Calculate total from order data
+  const calculateTotal = (items) => {
+    if (!items || items.length === 0) return 0
+    
+    const subtotal = items.reduce((sum, item) => {
+      const price = typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0
+      const quantity = item.quantity || 1
+      return sum + (price * quantity)
+    }, 0)
+    
+    const discount = 0
+    const deliveryFee = 2.50
+    return subtotal - discount + deliveryFee
+  }
 
-  const handleSubmit = (e) => {
+  const total = orderData ? calculateTotal(orderData.items || []) : 0
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (rating === 0) {
       alert('Please provide a rating')
       return
     }
-    // Here you would typically send the feedback to the backend
-    console.log('Feedback submitted:', { rating, feedback })
-    setSubmitted(true)
+
+    // Get the first item from order if available
+    const firstItem = orderData?.items?.[0]
+    if (!firstItem || !firstItem.item_id) {
+      alert('Unable to submit feedback: No item information available')
+      return
+    }
+
+    // Get customer ID from order data or localStorage
+    let customerId = null
+    if (orderData?.customer_id) {
+      customerId = orderData.customer_id
+    } else {
+      // Try to get from localStorage (set during checkout)
+      customerId = localStorage.getItem('customerId')
+    }
+
+    if (!customerId) {
+      alert('Unable to submit feedback: Customer information not available')
+      return
+    }
+
+    try {
+      const feedbackData = {
+        item_id: firstItem.item_id,
+        customer_id: customerId,
+        no_of_stars: rating,
+        feedback_message: feedback || null
+      }
+
+      await feedbackService.submitFeedback(feedbackData)
+      setSubmitted(true)
+    } catch (error) {
+      console.error('Error submitting feedback:', error)
+      alert('Failed to submit feedback. Please try again.')
+    }
   }
 
   const handleRatingClick = (value) => {
@@ -82,21 +131,25 @@ const Feedback = () => {
             <p>We'd love to hear about your experience</p>
           </div>
 
-          <div className="order-summary-section">
-            <h2>Order Summary</h2>
-            <div className="order-items-list">
-              {orderItems.map((item) => (
-                <div key={item.id} className="order-item">
-                  <span className="item-quantity">{item.quantity}x</span>
-                  <span className="item-name">{item.name}</span>
-                  <span className="item-price">RS {item.price}</span>
-                </div>
-              ))}
+          {orderData && orderData.items && (
+            <div className="order-summary-section">
+              <h2>Order Summary</h2>
+              <div className="order-items-list">
+                {orderData.items.map((item, index) => (
+                  <div key={item.id || index} className="order-item">
+                    <span className="item-quantity">{item.quantity || 1}x</span>
+                    <span className="item-name">{item.name}</span>
+                    <span className="item-price">
+                      RS {((typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0) * (item.quantity || 1)).toFixed(2)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="order-total">
+                <span>Total: RS {total.toFixed(2)}</span>
+              </div>
             </div>
-            <div className="order-total">
-              <span>Total: RS {total.toFixed(2)}</span>
-            </div>
-          </div>
+          )}
 
           <form onSubmit={handleSubmit} className="feedback-form">
             <div className="rating-section">
@@ -159,4 +212,3 @@ const Feedback = () => {
 }
 
 export default Feedback
-

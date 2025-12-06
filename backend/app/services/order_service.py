@@ -45,6 +45,35 @@ class OrderService:
             raise ValueError(f"Too far! You are {distance:.2f}km away. Limit is {MAX_DISTANCE_KM}km.")
 
     @staticmethod
+    def update_order(order_id, data):
+        """
+        General method to update order fields (status, total_amount, etc.)
+        """
+        order = OrderRepository.get_by_id(order_id)
+        if not order:
+            raise ValueError("Order not found")
+
+        # Update status if provided
+        if 'status' in data:
+            valid_statuses = ['pending', 'location_verified', 'awaiting_approval', 'paid', 'accepted', 'preparing', 'completed', 'rejected']
+            if data['status'] not in valid_statuses:
+                raise ValueError(f"Invalid status. Must be one of: {', '.join(valid_statuses)}")
+            order.status = data['status']
+
+        # Update total_amount if provided
+        if 'total_amount' in data:
+            order.total_amount = float(data['total_amount'])
+
+        # Save to DB
+        OrderRepository.update_status(order, order.status)
+        
+        return {
+            "message": "Order updated successfully",
+            "order_id": order_id,
+            "order": order.to_dict()
+        }
+
+    @staticmethod
     def update_order_status(order_id, action):
         """
         Handles Admin review actions: 'approve' or 'reject'
@@ -71,6 +100,71 @@ class OrderService:
             "order_id": order_id
         }
         
+
+    @staticmethod
+    def get_order_details(order_id):
+        """Get full order details including delivery info and payment"""
+        order = OrderRepository.get_by_id(order_id)
+        if not order:
+            raise ValueError("Order not found")
+        
+        # Get delivery info
+        delivery_info = None
+        if order.delivery_info:
+            delivery_info = {
+                "address": order.delivery_info.address,
+                "latitude": order.delivery_info.latitude,
+                "longitude": order.delivery_info.longitude,
+                "is_within_range": order.delivery_info.is_within_range
+            }
+        
+        # Get payment info
+        payment_info = None
+        if order.payment:
+            payment_info = {
+                "method": order.payment.method,
+                "amount": float(order.payment.amount),
+                "screenshot_url": order.payment.screenshot_url,
+                "payment_date": order.payment.payment_date.isoformat() if order.payment.payment_date else None
+            }
+        
+        # Get customer info
+        customer_info = None
+        if order.customer:
+            customer_info = {
+                "user_id": order.customer.user_id,
+                "name": order.customer.name,
+                "phone": order.customer.phone,
+                "address": order.customer.address
+            }
+        
+        return {
+            "order_id": order.order_id,
+            "customer_id": order.customer_id,
+            "status": order.status,
+            "total_amount": float(order.total_amount),
+            "created_at": order.created_at.isoformat() if order.created_at else None,
+            "customer": customer_info,
+            "delivery_info": delivery_info,
+            "payment": payment_info
+        }
+
+    @staticmethod
+    def get_all_orders(status=None):
+        """Get all orders, optionally filtered by status"""
+        from app.models.order import Order
+        if status:
+            orders = Order.query.filter_by(status=status).order_by(Order.created_at.desc()).all()
+        else:
+            orders = Order.query.order_by(Order.created_at.desc()).all()
+        return orders
+
+    @staticmethod
+    def get_customer_orders(customer_id):
+        """Get all orders for a specific customer"""
+        from app.models.order import Order
+        orders = Order.query.filter_by(customer_id=customer_id).order_by(Order.created_at.desc()).all()
+        return orders
 
     @staticmethod
     def get_analytics(report_type):

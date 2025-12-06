@@ -60,8 +60,8 @@ const Login = () => {
               <span className="logo-text">Muncheese</span>
             </Link>
             
-            <h1 className="login-heading">Hey there! Hungry? Log in to get tasty</h1>
-            <p className="login-subtitle">Welcome back! Please login to your account.</p>
+            <h1 className="login-heading">Admin Login</h1>
+            <p className="login-subtitle">This page is for restaurant administrators only. Customers can order directly without login.</p>
             
             <form onSubmit={handleSubmit} className="login-form">
               <div className="form-group">

@@ -1,0 +1,268 @@
+.admin-orders {
+  padding: 24px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+.orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.orders-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #03081f;
+  margin: 0;
+}
+
+.filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-controls label {
+  font-weight: 600;
+  color: #03081f;
+}
+
+.status-filter {
+  padding: 8px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.status-filter:hover {
+  border-color: #ffb800;
+}
+
+.refresh-btn {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #ffb800 0%, #ffa000 100%);
+  border: none;
+  border-radius: 8px;
+  color: #03081f;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.refresh-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
+}
+
+.error-message {
+  background: #fff5f5;
+  border: 2px solid #ffcccc;
+  color: #cc0000;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.orders-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table thead {
+  background: linear-gradient(135deg, #ffb800 0%, #ffa000 100%);
+  color: #03081f;
+}
+
+.orders-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.orders-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.orders-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.orders-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.edit-btn,
+.approve-btn,
+.reject-btn,
+.save-btn,
+.cancel-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.edit-btn {
+  background: #2196F3;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #1976D2;
+  transform: translateY(-1px);
+}
+
+.approve-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.approve-btn:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+}
+
+.reject-btn {
+  background: #f44336;
+  color: white;
+}
+
+.reject-btn:hover {
+  background: #da190b;
+  transform: translateY(-1px);
+}
+
+.save-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.save-btn:hover {
+  background: #45a049;
+}
+
+.cancel-btn {
+  background: #666;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #555;
+}
+
+.edit-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.status-select,
+.amount-input {
+  padding: 6px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 12px;
+  background: white;
+}
+
+.status-select {
+  min-width: 150px;
+}
+
+.amount-input {
+  width: 120px;
+}
+
+.status-select:focus,
+.amount-input:focus {
+  outline: none;
+  border-color: #ffb800;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 18px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .orders-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .orders-table {
+    font-size: 12px;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 8px;
+  }
+
+  .edit-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .status-select,
+  .amount-input {
+    width: 100%;
+  }
+}
+
+

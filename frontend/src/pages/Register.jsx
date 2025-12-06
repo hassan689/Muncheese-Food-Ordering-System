@@ -26,8 +26,14 @@ const Register = () => {
     setLoading(true)
 
     try {
-      await userService.register(formData)
-      navigate('/login')
+      const response = await userService.register(formData)
+      // After registration, redirect to menu (customers don't need to login)
+      navigate('/menu', { 
+        state: { 
+          message: 'Registration successful! You can now place orders.',
+          user: response.user || response
+        } 
+      })
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed')
     } finally {
