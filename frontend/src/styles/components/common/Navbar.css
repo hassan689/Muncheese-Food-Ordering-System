@@ -1,6 +1,5 @@
 .navbar {
   font-family: 'Poppins', sans-serif;
-  background-color: white;
   padding: 1rem 2rem;
   position: absolute;
   top: 1em;
@@ -8,11 +7,23 @@
   right: 200px;
   z-index: 99;
   border-radius: 50px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+/* Yellow navbar (default - for white backgrounds) */
+.navbar-yellow {
+  background-color: #ffb800;
+}
+
+/* White navbar (for yellow backgrounds) */
+.navbar-white {
+  background-color: white;
 }
 .navbar-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #000;
+  color: #03081f;
   text-decoration: none;
   display: flex;
   justify-content: center;
@@ -48,14 +59,32 @@
 }
 
 .navbar-menu a {
-  color: black;
+  color: #03081f;
   text-decoration: none;
   font-size: 1rem;
-  transition: opacity 0.3s;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
 }
 
-.navbar-menu a:hover {
-  opacity: 0.7;
+/* Hover effects for yellow navbar */
+.navbar-yellow .navbar-menu a:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: #03081f;
+}
+
+/* Hover effects for white navbar */
+.navbar-white .navbar-menu a:hover {
+  background: rgba(255, 184, 0, 0.2);
+  color: #03081f;
+}
+
+.nav-icon {
+  font-size: 18px;
 }
 
 @media (max-width: 768px) {

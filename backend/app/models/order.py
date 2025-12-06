@@ -39,10 +39,20 @@ class Order(db.Model):
     customer = db.relationship("User", backref="orders", lazy=True)
 
     def to_dict(self):
+        payment_info = None
+        if self.payment:
+            payment_info = {
+                "method": self.payment.method,
+                "amount": float(self.payment.amount) if self.payment.amount else None,
+                "screenshot": self.payment.screenshot_url,
+                "date": self.payment.payment_date.isoformat() if self.payment.payment_date else None
+            }
+        
         return {
             "order_id": self.order_id,
             "status": self.status,
             "total_amount": self.total_amount,
             "created_at": self.created_at.isoformat(),
-            "customer_id": self.customer_id
+            "customer_id": self.customer_id,
+            "payment": payment_info
         }

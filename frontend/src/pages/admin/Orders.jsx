@@ -10,6 +10,7 @@ const Orders = () => {
   const [statusFilter, setStatusFilter] = useState('all')
   const [editingOrder, setEditingOrder] = useState(null)
   const [updateData, setUpdateData] = useState({ status: '', total_amount: '' })
+  const [viewingPayment, setViewingPayment] = useState(null)
 
   useEffect(() => {
     fetchOrders()
@@ -56,10 +57,25 @@ const Orders = () => {
     try {
       const response = await orderService.reviewOrder(orderId, { action })
       alert(`Order ${action}d successfully!`)
+      setViewingPayment(null)
       fetchOrders()
     } catch (err) {
       console.error('Error reviewing order:', err)
       alert(err.response?.data?.error || `Failed to ${action} order`)
+    }
+  }
+
+  const handleVerifyPayment = async (orderId) => {
+    try {
+      // Update order status to paid and accepted
+      await orderService.updateOrder(orderId, { status: 'paid' })
+      await orderService.updateOrder(orderId, { status: 'accepted' })
+      alert('Payment verified and order confirmed!')
+      setViewingPayment(null)
+      fetchOrders()
+    } catch (err) {
+      console.error('Error verifying payment:', err)
+      alert(err.response?.data?.error || 'Failed to verify payment')
     }
   }
 
@@ -151,6 +167,7 @@ const Orders = () => {
                   <th>Customer ID</th>
                   <th>Status</th>
                   <th>Total Amount</th>
+                  <th>Payment Method</th>
                   <th>Created At</th>
                   <th>Actions</th>
                 </tr>
@@ -169,6 +186,20 @@ const Orders = () => {
                       </span>
                     </td>
                     <td>RS {parseFloat(order.total_amount || 0).toFixed(2)}</td>
+                    <td>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{order.payment?.method || 'N/A'}</span>
+                        {order.payment?.method === 'online' && order.payment?.screenshot && (
+                          <button
+                            onClick={() => setViewingPayment(order)}
+                            className="view-proof-btn"
+                            title="View Payment Proof"
+                          >
+                            📷 View Proof
+                          </button>
+                        )}
+                      </div>
+                    </td>
                     <td>{formatDate(order.created_at)}</td>
                     <td>
                       <div className="action-buttons">
@@ -221,7 +252,23 @@ const Orders = () => {
                             >
                               Edit
                             </button>
-                            {order.status === 'awaiting_approval' && (
+                            {order.status === 'awaiting_approval' && order.payment?.method === 'online' && (
+                              <>
+                                <button
+                                  onClick={() => handleVerifyPayment(order.order_id)}
+                                  className="verify-btn"
+                                >
+                                  ✓ Verify Payment
+                                </button>
+                                <button
+                                  onClick={() => handleReviewOrder(order.order_id, 'reject')}
+                                  className="reject-btn"
+                                >
+                                  Reject
+                                </button>
+                              </>
+                            )}
+                            {order.status === 'awaiting_approval' && order.payment?.method !== 'online' && (
                               <>
                                 <button
                                   onClick={() => handleReviewOrder(order.order_id, 'approve')}
@@ -245,6 +292,52 @@ const Orders = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {/* Payment Proof Modal */}
+        {viewingPayment && viewingPayment.payment?.screenshot && (
+          <div className="payment-proof-modal" onClick={() => setViewingPayment(null)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Payment Proof - Order #{viewingPayment.order_id}</h3>
+                <button className="close-modal" onClick={() => setViewingPayment(null)}>×</button>
+              </div>
+              <div className="modal-body">
+                <div className="payment-info">
+                  <p><strong>Amount:</strong> RS {parseFloat(viewingPayment.payment.amount || 0).toFixed(2)}</p>
+                  <p><strong>Method:</strong> {viewingPayment.payment.method}</p>
+                  <p><strong>Date:</strong> {formatDate(viewingPayment.payment.date)}</p>
+                </div>
+                <div className="proof-image-container">
+                  <img 
+                    src={viewingPayment.payment.screenshot} 
+                    alt="Payment proof" 
+                    className="proof-image"
+                  />
+                </div>
+                <div className="modal-actions">
+                  <button
+                    onClick={() => handleVerifyPayment(viewingPayment.order_id)}
+                    className="verify-payment-btn"
+                  >
+                    ✓ Verify Payment & Confirm Order
+                  </button>
+                  <button
+                    onClick={() => handleReviewOrder(viewingPayment.order_id, 'reject')}
+                    className="reject-payment-btn"
+                  >
+                    Reject Payment
+                  </button>
+                  <button
+                    onClick={() => setViewingPayment(null)}
+                    className="cancel-modal-btn"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

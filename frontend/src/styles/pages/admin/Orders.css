@@ -139,7 +139,8 @@
 .approve-btn,
 .reject-btn,
 .save-btn,
-.cancel-btn {
+.cancel-btn,
+.verify-btn {
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
@@ -195,6 +196,196 @@
 
 .cancel-btn:hover {
   background: #555;
+}
+
+.verify-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.verify-btn:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+}
+
+.view-proof-btn {
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: #ffb800;
+  color: #03081f;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: block;
+}
+
+.view-proof-btn:hover {
+  background: #ffa000;
+  transform: translateY(-1px);
+}
+
+/* Payment Proof Modal */
+.payment-proof-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #03081f;
+  margin: 0;
+}
+
+.close-modal {
+  background: transparent;
+  border: none;
+  font-size: 32px;
+  color: #666;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.close-modal:hover {
+  background: #f0f0f0;
+  color: #03081f;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.payment-info {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.payment-info p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #03081f;
+}
+
+.payment-info strong {
+  color: #03081f;
+  font-weight: 600;
+}
+
+.proof-image-container {
+  text-align: center;
+  margin-bottom: 24px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.proof-image {
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.verify-payment-btn {
+  flex: 1;
+  padding: 12px 24px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.verify-payment-btn:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.reject-payment-btn {
+  flex: 1;
+  padding: 12px 24px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.reject-payment-btn:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.cancel-modal-btn {
+  flex: 1;
+  padding: 12px 24px;
+  background: #e0e0e0;
+  color: #03081f;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cancel-modal-btn:hover {
+  background: #d0d0d0;
+  transform: translateY(-2px);
 }
 
 .edit-form {

@@ -24,7 +24,8 @@ const Checkout = () => {
   const [specialInstructions, setSpecialInstructions] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [locationData, setLocationData] = useState(null)
-
+  const [paymentProof, setPaymentProof] = useState(null)
+  const [paymentProofPreview, setPaymentProofPreview] = useState(null)
   // Redirect if cart is empty
   useEffect(() => {
     if (cart.length === 0) {
@@ -100,16 +101,23 @@ const Checkout = () => {
       }
 
       if (paymentMethod === 'online') {
-        // For online payment, you'd need to upload screenshot
-        // For now, we'll just record the payment method
-        paymentData.file = null // Would be file upload in real implementation
+        // For online payment, require payment proof
+        if (!paymentProof) {
+          alert('Please upload payment proof for online payment')
+          setIsSubmitting(false)
+          return
+        }
+        paymentData.file = paymentProof
       }
 
       try {
         await orderService.makePayment(paymentData)
       } catch (paymentError) {
-        console.warn('Payment processing:', paymentError)
-        // Continue - payment might be processed later
+        console.error('Payment processing error:', paymentError)
+        const errorMsg = paymentError.response?.data?.error || paymentError.message || 'Payment processing failed'
+        alert(errorMsg)
+        setIsSubmitting(false)
+        return
       }
 
       // Step 6: Clear cart and navigate to confirmation
@@ -215,7 +223,11 @@ const Checkout = () => {
                     name="paymentMethod"
                     value="cash"
                     checked={paymentMethod === 'cash'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    onChange={(e) => {
+                      setPaymentMethod(e.target.value)
+                      setPaymentProof(null)
+                      setPaymentProofPreview(null)
+                    }}
                   />
                   <span>Cash on Delivery</span>
                 </label>
@@ -230,6 +242,58 @@ const Checkout = () => {
                   <span>Online Payment</span>
                 </label>
               </div>
+              
+              {paymentMethod === 'online' && (
+                <div className="payment-proof-section">
+                  <label className="payment-proof-label">
+                    Upload Payment Proof *
+                    <span className="proof-hint">Upload screenshot of your payment transaction</span>
+                  </label>
+                  <div className="file-upload-area">
+                    <input
+                      type="file"
+                      id="payment-proof"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0]
+                        if (file) {
+                          setPaymentProof(file)
+                          // Create preview
+                          const reader = new FileReader()
+                          reader.onloadend = () => {
+                            setPaymentProofPreview(reader.result)
+                          }
+                          reader.readAsDataURL(file)
+                        }
+                      }}
+                      className="file-input"
+                    />
+                    {paymentProofPreview ? (
+                      <div className="proof-preview">
+                        <img src={paymentProofPreview} alt="Payment proof preview" />
+                        <button
+                          type="button"
+                          className="remove-proof-btn"
+                          onClick={() => {
+                            setPaymentProof(null)
+                            setPaymentProofPreview(null)
+                            document.getElementById('payment-proof').value = ''
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <label htmlFor="payment-proof" className="upload-label">
+                        <span className="upload-icon">📷</span>
+                        <span>Click to upload or drag and drop</span>
+                        <span className="upload-hint">PNG, JPG, JPEG up to 5MB</span>
+                      </label>
+                    )}
+                  </div>
+                </div>
+              )}
+              
               <div className="form-group">
                 <label>Special Instructions (Optional)</label>
                 <textarea

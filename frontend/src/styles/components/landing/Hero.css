@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   padding: 2rem;
+  padding-top: 45px;
   position: relative;
   overflow: hidden;
 }
@@ -20,6 +21,7 @@
 
 .hero-content {
   z-index: 2;
+  margin-top: 40px;
 }
 
 .hero-title {

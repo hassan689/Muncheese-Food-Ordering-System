@@ -6,11 +6,7 @@ const Footer = () => {
   const [email, setEmail] = useState('')
 
   const cities = [
-    'San Francisco', 'Miami', 'San Diego', 'East Bay', 'Long Beach',
-    'Los Angeles', 'Washington DC', 'Seattle', 'Portland', 'Nashville',
-    'New York City', 'Orange County', 'Atlanta', 'Charlotte', 'Denver',
-    'Chicago', 'Phoenix', 'Las Vegas', 'Sacramento', 'Oklahoma City',
-    'Columbus', 'New Mexico', 'Albuquerque', 'New Orleans'
+    'Lahore'
   ]
 
   const handleSubscribe = (e) => {

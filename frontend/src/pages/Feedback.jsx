@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { feedbackService } from '../services/feedbackService'
+import { orderService } from '../services/orderService'
+import { productService } from '../services/productService'
 import weblogo from '../assets/images/logo/weblogo.png'
 import '../styles/pages/Feedback.css'
 
@@ -12,13 +14,51 @@ const Feedback = () => {
   const [feedback, setFeedback] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [orderData, setOrderData] = useState(null)
+  const [customerOrders, setCustomerOrders] = useState([])
+  const [selectedItemId, setSelectedItemId] = useState(null)
+  const [availableItems, setAvailableItems] = useState([])
+  const [loading, setLoading] = useState(false)
 
-  // Get order data from location state
+  // Get order data from location state or fetch customer orders
   useEffect(() => {
     if (location.state?.orderData) {
       setOrderData(location.state.orderData)
+      // Set first item_id if available
+      if (location.state.orderData?.items?.[0]?.item_id) {
+        setSelectedItemId(location.state.orderData.items[0].item_id)
+      }
+    } else {
+      // Try to fetch customer's recent orders
+      fetchCustomerOrders()
     }
   }, [location])
+
+  const fetchCustomerOrders = async () => {
+    try {
+      setLoading(true)
+      const customerId = localStorage.getItem('customerId')
+      if (customerId) {
+        const orders = await orderService.getCustomerOrders(parseInt(customerId))
+        setCustomerOrders(orders || [])
+      }
+      
+      // Fetch available products to allow selection
+      try {
+        const products = await productService.getProductItems()
+        setAvailableItems(products || [])
+        // Set first item as default if no item is selected
+        if (products && products.length > 0 && !selectedItemId) {
+          setSelectedItemId(products[0].item_id)
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err)
+      }
+    } catch (error) {
+      console.error('Error fetching customer orders:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   // Calculate total from order data
   const calculateTotal = (items) => {
@@ -44,10 +84,19 @@ const Feedback = () => {
       return
     }
 
-    // Get the first item from order if available
-    const firstItem = orderData?.items?.[0]
-    if (!firstItem || !firstItem.item_id) {
-      alert('Unable to submit feedback: No item information available')
+    // Get item_id - prioritize selectedItemId, then from orderData
+    let itemId = selectedItemId
+    if (!itemId && orderData?.items?.[0]?.item_id) {
+      itemId = orderData.items[0].item_id
+    }
+
+    // If still no item_id, use first available item
+    if (!itemId && availableItems.length > 0) {
+      itemId = availableItems[0].item_id
+    }
+
+    if (!itemId) {
+      alert('Unable to submit feedback: No item information available. Please try again later.')
       return
     }
 
@@ -55,20 +104,22 @@ const Feedback = () => {
     let customerId = null
     if (orderData?.customer_id) {
       customerId = orderData.customer_id
+    } else if (customerOrders.length > 0 && customerOrders[0].customer_id) {
+      customerId = customerOrders[0].customer_id
     } else {
       // Try to get from localStorage (set during checkout)
       customerId = localStorage.getItem('customerId')
     }
 
     if (!customerId) {
-      alert('Unable to submit feedback: Customer information not available')
+      alert('Unable to submit feedback: Customer information not available. Please make sure you are logged in or have placed an order.')
       return
     }
 
     try {
       const feedbackData = {
-        item_id: firstItem.item_id,
-        customer_id: customerId,
+        item_id: itemId,
+        customer_id: parseInt(customerId),
         no_of_stars: rating,
         feedback_message: feedback || null
       }
@@ -77,7 +128,8 @@ const Feedback = () => {
       setSubmitted(true)
     } catch (error) {
       console.error('Error submitting feedback:', error)
-      alert('Failed to submit feedback. Please try again.')
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to submit feedback. Please try again.'
+      alert(errorMessage)
     }
   }
 
@@ -131,22 +183,63 @@ const Feedback = () => {
             <p>We'd love to hear about your experience</p>
           </div>
 
-          {orderData && orderData.items && (
+          {(orderData && orderData.items) || customerOrders.length > 0 ? (
             <div className="order-summary-section">
               <h2>Order Summary</h2>
-              <div className="order-items-list">
-                {orderData.items.map((item, index) => (
-                  <div key={item.id || index} className="order-item">
-                    <span className="item-quantity">{item.quantity || 1}x</span>
-                    <span className="item-name">{item.name}</span>
-                    <span className="item-price">
-                      RS {((typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0) * (item.quantity || 1)).toFixed(2)}
-                    </span>
+              {orderData && orderData.items ? (
+                <>
+                  <div className="order-items-list">
+                    {orderData.items.map((item, index) => (
+                      <div key={item.id || index} className="order-item">
+                        <span className="item-quantity">{item.quantity || 1}x</span>
+                        <span className="item-name">{item.name}</span>
+                        <span className="item-price">
+                          RS {((typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0) * (item.quantity || 1)).toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <div className="order-total">
-                <span>Total: RS {total.toFixed(2)}</span>
+                  <div className="order-total">
+                    <span>Total: RS {total.toFixed(2)}</span>
+                  </div>
+                </>
+              ) : (
+                <div className="order-items-list">
+                  <p style={{ marginBottom: '10px', color: '#666' }}>Your recent orders:</p>
+                  {customerOrders.slice(0, 5).map((order) => (
+                    <div key={order.order_id} className="order-item">
+                      <span className="item-name">Order #{order.order_id}</span>
+                      <span className="item-price">RS {parseFloat(order.total_amount || 0).toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          {!orderData && availableItems.length > 0 && (
+            <div className="order-summary-section">
+              <h2>Select Product to Review</h2>
+              <div className="order-items-list">
+                <select 
+                  value={selectedItemId || ''} 
+                  onChange={(e) => setSelectedItemId(parseInt(e.target.value))}
+                  className="item-select"
+                  style={{ 
+                    width: '100%', 
+                    padding: '12px', 
+                    borderRadius: '8px', 
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    marginTop: '10px'
+                  }}
+                >
+                  {availableItems.map((item) => (
+                    <option key={item.item_id} value={item.item_id}>
+                      {item.product_name} {item.size ? `- ${item.size}` : ''} - RS {parseFloat(item.price).toFixed(2)}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           )}

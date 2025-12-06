@@ -1,8 +1,18 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { FaHome, FaShoppingBag, FaUser } from 'react-icons/fa'
+import { MdRestaurantMenu } from 'react-icons/md'
 import weblogo from '../../assets/images/logo/weblogo.png'
 import '../../styles/components/common/Navbar.css'
 
 const Navbar = () => {
+  const location = useLocation()
+  
+  // Pages with yellow backgrounds (navbar should be white)
+  const yellowBackgroundPages = ['/', '/home', '/login', '/register', '/contact', '/feedback']
+  
+  // Check if current page has yellow background
+  const hasYellowBackground = yellowBackgroundPages.includes(location.pathname)
+  
   // Simple check for admin login
   const adminToken = localStorage.getItem('adminToken')
   const adminUser = localStorage.getItem('adminUser')
@@ -24,7 +34,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${hasYellowBackground ? 'navbar-white' : 'navbar-yellow'}`}>
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
           <img src={weblogo} alt="Muncheese Logo" className="logo-img" />
@@ -33,9 +43,24 @@ const Navbar = () => {
           <h1>Muncheese</h1>
         </div>
         <ul className="navbar-menu">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/dashboard">Dashboard</Link></li>
-          <li><Link to="/orders">Orders</Link></li>
+          <li>
+            <Link to="/">
+              <FaHome className="nav-icon" />
+              <span>Home</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/menu">
+              <MdRestaurantMenu className="nav-icon" />
+              <span>Menu</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/orders">
+              <FaShoppingBag className="nav-icon" />
+              <span>Orders</span>
+            </Link>
+          </li>
           {isAdmin && (
             <>
               <li><Link to="/admin">Admin</Link></li>
@@ -50,7 +75,11 @@ const Navbar = () => {
               </button>
             </li>
           ) : (
-            <li><Link to="/login">Admin Login</Link></li>
+            <li>
+              <Link to="/login">
+                <FaUser className="nav-icon" />
+              </Link>
+            </li>
           )}
         </ul>
       </div>
