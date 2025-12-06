@@ -4,8 +4,8 @@ import "../../../styles/components/admin/Reports/LineChart.css"
 const LineChart = ({ data, activeTab, onTabChange }) => {
   const [animation, setAnimation] = useState(0)
 
-  const tabs = ["Confirmed", "Cancelled"]
-  const colors = { Confirmed: "#333", Cancelled: "#ffb800" }
+  const tabs = ["Accepted", "Rejected"]
+  const colors = { Accepted: "#333", Rejected: "#ffb800" }
 
   // Current tab dataset
   const currentData = useMemo(() => {

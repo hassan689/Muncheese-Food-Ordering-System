@@ -35,27 +35,6 @@
   margin: 0;
 }
 
-.stat-trend {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  margin-top: 8px;
-  font-weight: 600;
-}
-
-.stat-trend.up {
-  color: #10b981;
-}
-
-.stat-trend.down {
-  color: #ef4444;
-}
-
-.stat-trend-icon {
-  font-size: 16px;
-}
-
 .stat-icon {
   width: 48px;
   height: 48px;

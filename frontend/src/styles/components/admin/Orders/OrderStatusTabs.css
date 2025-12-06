@@ -1,58 +1,65 @@
-        /* Order Tabs */
-        .order-tabs {
-          margin-bottom: 30px;
-          overflow-x: auto;
-          padding-bottom: 10px;
-        }
+/* Order Tabs */
+.order-tabs {
+  margin-bottom: 30px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
 
-        .tabs-container {
-          display: flex;
-          gap: 10px;
-          min-width: min-content;
-        }
+.tabs-container {
+  display: flex;
+  gap: 10px;
+  min-width: min-content;
+}
 
-        .tab-button {
-          padding: 12px 20px;
-          border: 2px solid #ddd;
-          background: white;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: all 0.3s;
-          font-size: 14px;
-          font-weight: 600;
-          white-space: nowrap;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
+.tab-button {
+  padding: 12px 20px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-        .tab-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+.tab-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        .tab-button.active {
-          border-color: #FFC107;
-        }
+.tab-button.active {
+  border-color: #ffc107;
+}
 
-        .tab-button.pending {
-          color: #666;
-          border-color: #ddd;
-        }
+.tab-button.pending {
+  color: #666;
+  border-color: #ddd;
+}
 
-        .tab-button.accepted {
-          background: #E8F5E9;
-          border-color: #4CAF50;
-          color: #2E7D32;
-        }
+.tab-button.accepted {
+  background: #e8f5e9;
+  border-color: #4caf50;
+  color: #2e7d32;
+}
 
-        .tab-button.rejected {
-          background: #FFEBEE;
-          border-color: #F44336;
-          color: #C62828;
-        }
+.tab-button.rejected {
+  background: #ffebee;
+  border-color: #f44336;
+  color: #c62828;
+}
 
-        .tab-icon {
-          font-size: 16px;
-          font-weight: bold;
-        }
+.tab-icon {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tabs-container {
+    justify-content: flex-start;
+  }
+}

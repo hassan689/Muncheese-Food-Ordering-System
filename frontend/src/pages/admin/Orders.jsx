@@ -1,6 +1,6 @@
 import OrderCardsGrid from "../../components/admin/Orders/OrderCardGrid";
 import OrderStatusTabs from "../../components/admin/Orders/OrderStatusTabs";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AdminLayout from "../../layouts/admin/Layout";
 import "../../styles/pages/admin/Orders.css";
 
@@ -24,7 +24,7 @@ const OrdersPage = () => {
           description: "Fresh Prawn mix salad",
           price: 5.3,
           quantity: 1,
-        },
+        }
       ],
     },
     {
@@ -46,18 +46,9 @@ const OrdersPage = () => {
           price: 5.3,
           quantity: 1,
         },
-      ],
-    },
-    {
-      order_id: 347,
-      customer_id: "C003",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
         {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
+          name: "Chinese Takeout Disj",
+          description: "Fresh Prawn mix salad",
           price: 5.3,
           quantity: 1,
         },
@@ -67,18 +58,9 @@ const OrdersPage = () => {
           price: 5.3,
           quantity: 1,
         },
-      ],
-    },
-    {
-      order_id: 348,
-      customer_id: "C004",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
         {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
+          name: "Chinese Takeout Disj",
+          description: "Fresh Prawn mix salad",
           price: 5.3,
           quantity: 1,
         },
@@ -87,7 +69,7 @@ const OrdersPage = () => {
           description: "Fresh Prawn mix salad",
           price: 5.3,
           quantity: 1,
-        },
+        }
       ],
     },
     {
@@ -174,70 +156,93 @@ const OrdersPage = () => {
         },
       ],
     },
-    {
-      order_id: 353,
-      customer_id: "C009",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-      ],
-    },
-    {
-      order_id: 354,
-      customer_id: "C010",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-      ],
-    },
   ]);
 
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);                     // This state variable is responsible whenever order is updated to re-render
 
-  const handleAccept = (orderId) => {
-    setOrders(
-      orders.map((order) =>
-        order.order_id === orderId ? { ...order, status: "accepted" } : order
-      )
-    );
+  const handleAccept = async (orderId) => {
+    // Approve/ Accept Orders
+    try {
+      const response = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/review`, {
+        method: "POST",
+        headers: {
+          "user-id": 1,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ action: "approve" })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response}`);
+      }
+
+      const data = await response.json();
+      console.log("Order Accepted:", data);
+      // Updating on frontend (envokes re-render)
+      setOrders(
+        orders.map((order) =>
+          order.order_id === orderId ? { ...order, status: "accepted" } : order
+        )
+      );
+    } catch (error) {
+      console.error("Failed to add product:", error);
+    }
   };
 
-  const handleReject = (orderId) => {
-    setOrders(
-      orders.map((order) =>
-        order.order_id === orderId ? { ...order, status: "rejected" } : order
-      )
-    );
+  const handleReject = async (orderId) => {
+    // Reject/ Decline Orders
+    try {
+      const response = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/review`, {
+        method: "POST",
+        headers: {
+          "user-id": 1,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ action: "reject" })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response}`);
+      }
+
+      const data = await response.json();
+      console.log("Order Rejected:", data);
+      // Updating on frontend (envokes re-render)
+      setOrders(
+        orders.map((order) =>
+          order.order_id === orderId ? { ...order, status: "rejected" } : order
+        )
+      );
+    } catch (error) {
+      console.error("Failed to add product:", error);
+    }
   };
 
-  const handleComplete = (orderId) => {
-    setOrders(orders.filter((order) => order.order_id !== orderId));
+  /* TO BE IMPLEMENTED */
+  const handleComplete = async (orderId) => {
+    // // Completed Orders
+    // try {
+    //   const response = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/review`, {
+    //     method: "POST",
+    //     headers: {
+    //       "user-id": 1,
+    //       "Content-Type": "application/json"
+    //     },
+    //     body: JSON.stringify({ action: "completed" })
+    //   });
+
+    //   if (!response.ok) {
+    //     throw new Error(`Error: ${response}`);
+    //   }
+
+    //   const data = await response.json();
+    //   console.log("Order Completed:", data);
+    //   // Updating on frontend (envokes re-render)
+    //   setOrders(orders.filter((order) => order.order_id !== orderId));
+    // } catch (error) {
+    //   console.error("Failed to add product:", error);
+    // }
+      setOrders(orders.filter((order) => order.order_id !== orderId));
   };
 
   const displayedOrders = orders.filter(
@@ -245,7 +250,7 @@ const OrdersPage = () => {
   );
 
   return (
-    <AdminLayout>
+    <AdminLayout title="Orders">
       <div className="orders-page">
         <div className="page-header">
           <h1>Order List</h1>

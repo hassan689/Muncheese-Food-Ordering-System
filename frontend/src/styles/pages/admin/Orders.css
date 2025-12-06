@@ -1,131 +1,204 @@
-       /* Order Footer */
-        .orders-page {
-          padding: 20px;
-          background: #f5f5f5;
-          min-height: 100vh;
-        }
+/* Order Card */
+.order-card {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+}
 
-        .page-header {
-          margin-bottom: 30px;
-        }
+.order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
 
-        .page-header h1 {
-          font-size: 28px;
-          color: #333;
-          font-weight: 600;
-        }
-               
-       .order-footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: auto;
-          padding-top: 15px;
-          border-top: 1px solid #f0f0f0;
-        }
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
 
-        .items-count {
-          font-size: 13px;
-          color: #666;
-          font-weight: 500;
-        }
+.order-header h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 4px;
+}
 
-        /* Action Buttons */
-        .order-actions {
-          display: flex;
-          gap: 8px;
-        }
+.order-date {
+  font-size: 12px;
+  color: #999;
+}
 
-        .action-buttons {
-          display: flex;
-          gap: 8px;
-        }
+/* Order Items - COMPACT SCROLLABLE */
+.order-items {
+  margin-bottom: 20px;
+  max-height: 160px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
 
-        .btn-accept,
-        .btn-reject {
-          width: 40px;
-          height: 40px;
-          border-radius: 8px;
-          border: none;
-          cursor: pointer;
-          font-size: 20px;
-          font-weight: bold;
-          transition: all 0.3s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
+.order-items::-webkit-scrollbar {
+  width: 5px;
+}
 
-        .btn-accept {
-          background: #E8F5E9;
-          color: #4CAF50;
-        }
+.order-items::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 10px;
+}
 
-        .btn-accept:hover {
-          background: #4CAF50;
-          color: white;
-          transform: scale(1.1);
-        }
+.order-items::-webkit-scrollbar-thumb {
+  background: #FFC107;
+  border-radius: 10px;
+}
 
-        .btn-reject {
-          background: #FFEBEE;
-          color: #F44336;
-        }
+.order-items::-webkit-scrollbar-thumb:hover {
+  background: #FFB300;
+}
 
-        .btn-reject:hover {
-          background: #F44336;
-          color: white;
-          transform: scale(1.1);
-        }
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
 
-        .btn-complete {
-          background: #4CAF50;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 8px;
-          font-size: 13px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
+.order-item:last-child {
+  border-bottom: none;
+}
 
-        .btn-complete:hover {
-          background: #388E3C;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
-        }
+.item-details h4 {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
 
-        .status-badge {
-          padding: 8px 16px;
-          border-radius: 8px;
-          font-size: 12px;
-          font-weight: 600;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
+.item-details p {
+  font-size: 12px;
+  color: #999;
+}
 
-        .status-badge.rejected {
-          background: #FFEBEE;
-          color: #F44336;
-        }
+.item-price-qty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
 
-        .status-badge.completed {
-          background: #E8F5E9;
-          color: #4CAF50;
-        }
+.item-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
 
-        /* Responsive */
-        @media (max-width: 768px) {
-          .orders-grid {
-            grid-template-columns: 1fr;
-          }
-          
-          .tabs-container {
-            justify-content: flex-start;
-          }
-        }
+.item-qty {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Order Footer */
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.items-count {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.order-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-accept,
+.btn-reject {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-accept {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.btn-accept:hover {
+  background: #4caf50;
+  color: white;
+  transform: scale(1.1);
+}
+
+.btn-reject {
+  background: #ffebee;
+  color: #f44336;
+}
+
+.btn-reject:hover {
+  background: #f44336;
+  color: white;
+  transform: scale(1.1);
+}
+
+.btn-complete {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-complete:hover {
+  background: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.status-badge {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-badge.rejected {
+  background: #ffebee;
+  color: #f44336;
+}
+
+.status-badge.completed {
+  background: #e8f5e9;
+  color: #4caf50;
+}

@@ -1,13 +1,11 @@
 import Card from "../../ui/Card"
 import {ADMIN_COLORS} from "../../../utils/constants"
-import "../../../styles/components/admin/Dashboard/StatCard.css"
+import "../../../styles/components/admin/Dashboard/AdminStatCard.css"
 
 const AdminStatCard = ({
   title,
   value,
   icon,
-  trend,
-  trendValue,
   chart,
   color = ADMIN_COLORS.Secondary,
 }) => {
@@ -16,17 +14,7 @@ const AdminStatCard = ({
       <div className="stat-header">
         <div className="stat-info">
           <h3>{title}</h3>
-
           <div className="stat-value">{value}</div>
-
-          {trend && (
-            <div className={`stat-trend ${trend}`}>
-              <span className="stat-trend-icon">
-                {trend === "up" ? "↗" : "↘"}
-              </span>
-              <span>{trendValue}</span>
-            </div>
-          )}
         </div>
 
         <div>

@@ -8,11 +8,11 @@ import '../../styles/pages/admin/Reports.css'
 const fetchReportData = () => {
   return {
     chartData: {
-      confirmed: 80,
-      cancelled: 20
+      accepted: 80,
+      rejected: 20
     },
     trendData: {
-      confirmed: [
+      accepted: [
         { month: 'JAN', value: 3000 },
         { month: 'FEB', value: 3500 },
         { month: 'MAR', value: 4000 },
@@ -26,7 +26,7 @@ const fetchReportData = () => {
         { month: 'NOV', value: 6200 },
         { month: 'DEC', value: 6500 }
       ],
-      cancelled: [
+      rejected: [
         { month: 'JAN', value: 1500 },
         { month: 'FEB', value: 1600 },
         { month: 'MAR', value: 1400 },
@@ -83,7 +83,7 @@ const fetchReportData = () => {
 
 const Reports = () => {
   // UI State
-  const [activeTab, setActiveTab] = useState('Confirmed')
+  const [activeTab, setActiveTab] = useState('Accepted')
   const [startDate, setStartDate] = useState('2024-04-01')
   const [endDate, setEndDate] = useState('2024-04-08')
   

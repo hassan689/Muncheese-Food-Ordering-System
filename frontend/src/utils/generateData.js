@@ -11,9 +11,8 @@ export function generateYearDailyData({ year = new Date().getFullYear(), daysPer
       const dayOfYear = idx++;
       const baseSales = 3000 + Math.sin(dayOfYear) * 700 + monthBase[m] * 400; // 3000 + (-1 <-> 1) * 700 (Sin Curve) + (0.9 <-> 1.35) * 400 (Monthly Increase or Decrease in Sales)
       const sales = Math.round(Math.max(0, baseSales + (Math.random() - 0.5) * 600)); // adds random noise ±300 to baseSales but never let it go below 0
-      const revenue = Math.round(Math.max(0, sales * (0.55 + Math.random() * 0.45))); // 0.55 * sales <= revenue <= 1 * sales, which means 0.55 comes if Math.rand() == 0 and 0.45 comes if Math.rand() == 1
       const date = new Date(year, m, d).toISOString().slice(0, 10); // converts it to "YYYY-MM-DD" format
-      result.push({ date, sales, revenue });
+      result.push({ date, sales });
     }
   }
   return result;
@@ -28,9 +27,8 @@ export function aggregateMonthly(data, daysPerMonth = 30) {
     const slice = data.slice(start, start + daysPerMonth);
     if (slice.length === 0) continue;
     const sales = Math.round(slice.reduce((s, x) => s + x.sales, 0) / slice.length); // average
-    const revenue = Math.round(slice.reduce((s, x) => s + x.revenue, 0) / slice.length);
     const label = new Date(slice[0].date).toLocaleString(undefined, { month: "short" });
-    months.push({ label, sales, revenue });
+    months.push({ label, sales });
   }
   return months;
 }
@@ -42,8 +40,7 @@ export function aggregateWeekly(data, daysPerWeek = 7) {
     if (slice.length === 0) continue;
     const label = slice[0].date; // start date
     const sales = Math.round(slice.reduce((s, x) => s + x.sales, 0) / slice.length);
-    const revenue = Math.round(slice.reduce((s, x) => s + x.revenue, 0) / slice.length);
-    weeks.push({ label, sales, revenue });
+    weeks.push({ label, sales });
   }
   return weeks;
 }

@@ -8,15 +8,15 @@ const DonutChart = ({ data }) => {
   const chartMetrics = useMemo(() => {
     if (!data) return null
 
-    const { confirmed, cancelled } = data
-    const total = confirmed + cancelled
+    const { accepted, rejected } = data
+    const total = accepted + rejected
 
     if (total === 0) return null
 
     const CIRC = 314 // circumference of r=50
     const baseSegments = [
-      { label: "Confirmed", value: confirmed, color: "#333" },
-      { label: "Cancelled", value: cancelled, color: "#ffb800" }
+      { label: "Accepted", value: accepted, color: "#333" },
+      { label: "Rejected", value: rejected, color: "#ffb800" }
     ]
 
     let offset = 0
