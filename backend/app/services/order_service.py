@@ -342,9 +342,17 @@ class OrderService:
         rejected_count = sum(1 for o in orders if o.status == 'rejected')
         total_count = len(orders)
         
-        # Calculate percentages
-        accepted_percentage = int((accepted_count / total_count * 100)) if total_count > 0 else 0
-        rejected_percentage = int((rejected_count / total_count * 100)) if total_count > 0 else 0
+        # Calculate daily sales and weekly revenue from payments
+        from app.repositories.payment_repository import PaymentRepository
+        
+        # Daily sales: sum of all payments in the date range
+        daily_sales = PaymentRepository.get_total_sum(start_dt, end_dt)
+        
+        # Weekly revenue: sum of payments in the last 7 days of the range
+        week_start = end_dt - timedelta(days=7)
+        if week_start < start_dt:
+            week_start = start_dt
+        weekly_revenue = PaymentRepository.get_total_sum(week_start, end_dt)
         
         # Get monthly trend data for accepted and rejected
         monthly_trend = []
@@ -411,9 +419,11 @@ class OrderService:
         
         return {
             "chartData": {
-                "accepted": accepted_percentage,
-                "rejected": rejected_percentage
+                "accepted": accepted_count,  # Send actual count, not percentage
+                "rejected": rejected_count    # Send actual count, not percentage
             },
             "trendData": trend_data,
-            "orders": orders_list
+            "orders": orders_list,
+            "dailySales": float(daily_sales) if daily_sales else 0.0,
+            "weeklyRevenue": float(weekly_revenue) if weekly_revenue else 0.0
         }

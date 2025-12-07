@@ -17,6 +17,7 @@ class Order(db.Model):
     # Financials
     total_amount = db.Column(db.Float, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    status_updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # Tracks when status was last changed
     
     # Relationships
     # Notice we use STRINGS "DeliveryInfo" and "Payment" instead of importing the classes.
@@ -63,13 +64,25 @@ class Order(db.Model):
                 "address": self.customer.address
             }
         
+        # Get delivery info
+        delivery_info_data = None
+        if self.delivery_info:
+            delivery_info_data = {
+                "address": self.delivery_info.address,
+                "lat": float(self.delivery_info.latitude) if self.delivery_info.latitude else None,
+                "lng": float(self.delivery_info.longitude) if self.delivery_info.longitude else None,
+                "is_within_range": self.delivery_info.is_within_range if hasattr(self.delivery_info, 'is_within_range') else None
+            }
+        
         return {
             "order_id": self.order_id,
             "status": self.status,
             "total_amount": self.total_amount,
-            "created_at": self.created_at.isoformat(),
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "status_updated_at": self.status_updated_at.isoformat() if self.status_updated_at else None,
             "customer_id": self.customer_id,
             "customer": customer_info,
+            "delivery_info": delivery_info_data,
             "payment": payment_info,
             "items": items
         }

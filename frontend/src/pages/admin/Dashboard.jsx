@@ -71,8 +71,8 @@ const AdminDashboard = () => {
     [stats]
   );
 
-  const todaySales = stats?.today_sales || 0;
-  const lastWeekRevenue = stats?.last_week_revenue || 0;
+  const todaySales = Math.round(stats?.today_sales || 0);
+  const lastWeekRevenue = Math.round(stats?.last_week_revenue || 0);
 
   if (loading) {
     return (

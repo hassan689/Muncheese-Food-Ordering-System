@@ -15,7 +15,13 @@ const AdminLayout = ({ children, title }) => {
   ];
 
   const handleLogout = () => {
-    console.log("Logging out...");
+    // Clear admin authentication data
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
+    localStorage.removeItem('adminUserId');
+    
+    // Redirect to login page
+    window.location.href = '/login';
   };
 
   return (

@@ -77,7 +77,7 @@ export const CartProvider = ({ children }) => {
   }, 0)
 
   // Delivery fee (can be made configurable)
-  const deliveryFee = 2.50
+  const deliveryFee = 150
 
   // Discount (can be calculated based on promotions)
   const discount = 0 // For now, no discount. Can be updated based on backend logic

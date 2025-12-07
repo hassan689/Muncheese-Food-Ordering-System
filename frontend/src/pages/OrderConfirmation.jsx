@@ -30,7 +30,7 @@ const OrderConfirmation = () => {
 
   // Calculate totals from order data
   const calculateTotals = (items) => {
-    if (!items || items.length === 0) return { subtotal: 0, discount: 0, deliveryFee: 2.50, total: 2.50 }
+    if (!items || items.length === 0) return { subtotal: 0, discount: 0, deliveryFee: 150, total: 150 }
     
     const subtotal = items.reduce((sum, item) => {
       const price = typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0
@@ -39,7 +39,7 @@ const OrderConfirmation = () => {
     }, 0)
     
     const discount = 0 // Can be calculated from backend
-    const deliveryFee = 2.50 // Can be fetched from backend
+    const deliveryFee = 150 // Can be fetched from backend
     const total = subtotal - discount + deliveryFee
     
     return { subtotal, discount, deliveryFee, total }

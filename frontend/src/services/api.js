@@ -17,6 +17,13 @@ api.interceptors.request.use(
     if (adminToken) {
       config.headers.Authorization = `Bearer ${adminToken}`
     }
+    
+    // Add user_id header for admin routes and product routes (required by admin middleware)
+    const adminUserId = localStorage.getItem('adminUserId')
+    if (adminUserId && config.url && (config.url.includes('/admin') || config.url.includes('/products'))) {
+      config.headers['user-id'] = adminUserId
+    }
+    
     return config
   },
   (error) => {

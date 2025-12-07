@@ -389,7 +389,7 @@ const OrderTracking = () => {
   // Calculate totals (for now, using order total_amount)
   const subtotal = orderData.total_amount || 0
   const discount = 0
-  const deliveryFee = 2.50
+  const deliveryFee = 150
   const total = subtotal
 
   return (

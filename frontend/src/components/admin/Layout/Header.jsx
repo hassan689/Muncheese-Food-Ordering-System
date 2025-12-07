@@ -9,8 +9,6 @@ const AdminHeader = ({ title }) => {
       </div>
 
       <div className="header-right">
-        <button className="notification-btn">🔔</button>
-
         <div className="profile-picture">
           <img
             src="https://ui-avatars.com/api/?name=Admin&background=fbbf24&color=000&bold=true"

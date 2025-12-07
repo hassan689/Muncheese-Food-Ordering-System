@@ -12,29 +12,39 @@ const OrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   // Fetch orders from API
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        setLoading(true);
-        const adminUserId = localStorage.getItem('adminUserId') || '1'; // Get admin user ID
-        
-        // Fetch all orders using admin endpoint
-        const response = await api.get('/api/admin/orders', {
-          headers: {
-            'user-id': adminUserId
-          }
-        });
-        
-        setOrders(response.data || []);
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-        setOrders([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchOrders = async () => {
+    try {
+      const adminUserId = localStorage.getItem('adminUserId') || '1'; // Get admin user ID
+      
+      // Fetch all orders using admin endpoint
+      const response = await api.get('/api/admin/orders', {
+        headers: {
+          'user-id': adminUserId
+        }
+      });
+      
+      setOrders(response.data || []);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // Initial fetch and set up polling
+  useEffect(() => {
+    // Initial fetch
+    setLoading(true);
     fetchOrders();
+
+    // Set up polling every 5 seconds
+    const intervalId = setInterval(() => {
+      fetchOrders();
+    }, 5000); // 5000ms = 5 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const handleAccept = async (orderId) => {
@@ -152,7 +162,7 @@ const OrdersPage = () => {
         ) : (
           <>
             <OrderStatusTabs
-              orders={orders}
+              orders={displayedOrders}
               selectedOrder={selectedOrder}
               onOrderSelect={setSelectedOrder}
             />

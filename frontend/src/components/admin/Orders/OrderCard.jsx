@@ -61,7 +61,12 @@ const OrderCard = ({ order, onAccept, onReject, onComplete }) => {
       <Card className="order-card">
         <div className="order-header">
           <div>
-            <h3>Order #{order.order_id}</h3>
+            {order.status !== 'rejected' && (
+              <h3>Order #{order.order_id}</h3>
+            )}
+            {order.status === 'rejected' && (
+              <h3>Order</h3>
+            )}
             <p className="order-date">{formatDate(order.created_at)}</p>
           </div>
           <button 

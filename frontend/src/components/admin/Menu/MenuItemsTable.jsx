@@ -1,5 +1,6 @@
 // Menu Items Table Component
 import { useState } from "react";
+import { FaEdit, FaTrash, FaExclamationTriangle } from "react-icons/fa";
 import "../../../styles/components/admin/Menu/MenuItemsTable.css";
 
 const MenuItemsTable = ({ items, onEdit, onDelete }) => {
@@ -58,7 +59,7 @@ const MenuItemsTable = ({ items, onEdit, onDelete }) => {
                       onClick={() => onEdit(item)}
                       title="Edit"
                     >
-                      ✏️
+                      <FaEdit />
                     </button>
                     <button
                       className={`btn-delete ${
@@ -71,7 +72,11 @@ const MenuItemsTable = ({ items, onEdit, onDelete }) => {
                           : "Delete"
                       }
                     >
-                      {deleteConfirm === item.item_id ? "⚠️" : "🗑️"}
+                      {deleteConfirm === item.item_id ? (
+                        <FaExclamationTriangle />
+                      ) : (
+                        <FaTrash />
+                      )}
                     </button>
                   </div>
                 </td>

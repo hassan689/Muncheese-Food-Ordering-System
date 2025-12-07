@@ -92,7 +92,7 @@ const DonutChart = ({ data }) => {
 
           <div className="donut-center">
             <span className="donut-total">Total</span>
-            <span className="donut-value">{chartMetrics.total}</span>
+            <span className="donut-value">{Math.round(chartMetrics.total)}</span>
           </div>
         </div>
 
@@ -104,7 +104,7 @@ const DonutChart = ({ data }) => {
               <span className="legend-label">
                 {seg.label}
                 <span className="legend-value">
-                  {seg.value} ({seg.percentage.toFixed(1)}%)
+                  {Math.round(seg.value)} ({seg.percentage.toFixed(1)}%)
                 </span>
               </span>
             </div>

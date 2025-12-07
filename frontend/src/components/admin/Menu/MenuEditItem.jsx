@@ -7,15 +7,22 @@ export default function MenuEditItem({ isOpen, onClose, item, onEdit }) {
 
   console.log(item);
   const [formData, setFormData] = useState({
-    product_name: item.product_name,
-    size: item.size,
-    price: item.price,
+    product_name: item?.product_name || "",
+    price: item?.price || "",
   });
+
+  useEffect(() => {
+    if (item) {
+      setFormData({
+        product_name: item.product_name || "",
+        price: item.price || "",
+      });
+    }
+  }, [item]);
 
   const handleSubmit = async () => {
     const payload = {
       product_name: formData.product_name,
-      size: formData.size,
       price: Number(formData.price),
     };
 
@@ -47,27 +54,17 @@ export default function MenuEditItem({ isOpen, onClose, item, onEdit }) {
 
           <div className="form-group">
             <label>Category (Not Editable)</label>
-            <input type="text" value={item.category} disabled />
+            <input type="text" value={item?.category || ""} disabled style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }} />
           </div>
 
           <div className="form-group">
             <label>Description (Not Editable)</label>
-            <textarea rows="2" value={item.description} disabled />
+            <textarea rows="2" value={item?.description || ""} disabled style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }} />
           </div>
 
           <div className="form-group">
-            <label>Size</label>
-            <select
-              value={formData.size}
-              onChange={(e) =>
-                setFormData({ ...formData, size: e.target.value })
-              }
-            >
-              {!formData.size && <option value="">Select Size</option>}
-              <option value="Small">Small</option>
-              <option value="Medium">Medium</option>
-              <option value="Large">Large</option>
-            </select>
+            <label>Size (Not Editable)</label>
+            <input type="text" value={item?.size || "Standard"} disabled style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }} />
           </div>
 
           <div className="form-group">

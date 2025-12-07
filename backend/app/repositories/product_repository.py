@@ -1,6 +1,8 @@
 # repositories/product_repository.py
 from app.models.product import Product, ProductItem
+from app.models.feedback import Feedback
 from app.extensions import db
+from sqlalchemy import func, desc
 
 class ProductRepository:
     @staticmethod
@@ -164,33 +166,99 @@ class ProductRepository:
     def get_popular_items(limit=4):
         """
         Get popular items for landing page.
-        Returns one item per product (the one with the lowest price) up to the limit.
+        Returns one item from each category with highest reviews (average rating).
+        If there are fewer than 4 categories, fills remaining slots with highest-rated items.
         """
-        # Get all items
-        all_items = ProductItem.query.all()
+        # Get all categories
+        categories = db.session.query(Product.category).distinct().all()
+        categories = [cat[0] for cat in categories if cat[0]]
         
-        if not all_items:
+        if not categories:
             return []
         
-        # Group by product_id and get the cheapest item from each product
-        product_map = {}
+        popular_items = []
+        used_categories = set()
         
-        for item in all_items:
-            product_id = item.product_id
+        # For each category, find the item with highest average rating
+        for category in categories:
+            if len(popular_items) >= limit:
+                break
             
-            if product_id not in product_map:
-                product_map[product_id] = item
+            # Get items in this category with their average ratings
+            category_items = db.session.query(
+                ProductItem,
+                func.avg(Feedback.no_of_stars).label('avg_rating'),
+                func.count(Feedback.feedback_id).label('review_count')
+            ).join(
+                Product, ProductItem.product_id == Product.product_id
+            ).outerjoin(
+                Feedback, ProductItem.item_id == Feedback.item_id
+            ).filter(
+                Product.category == category
+            ).group_by(
+                ProductItem.item_id
+            ).having(
+                func.count(Feedback.feedback_id) > 0  # Only items with at least one review
+            ).order_by(
+                desc('avg_rating'), desc('review_count')
+            ).all()
+            
+            if category_items:
+                # Get the item with highest rating (first in the ordered list)
+                item_with_rating = category_items[0]
+                item = item_with_rating[0]
+                popular_items.append(item)
+                used_categories.add(category)
             else:
-                # Keep the one with lower price
-                existing = product_map[product_id]
-                if float(item.price) < float(existing.price):
-                    product_map[product_id] = item
+                # If no items with reviews in this category, get the cheapest item
+                fallback_item = db.session.query(ProductItem).join(
+                    Product, ProductItem.product_id == Product.product_id
+                ).filter(
+                    Product.category == category
+                ).order_by(ProductItem.price).first()
+                
+                if fallback_item:
+                    popular_items.append(fallback_item)
+                    used_categories.add(category)
         
-        # Convert to list, sort by price (ascending), and take first 'limit' items
-        popular_items = sorted(
-            list(product_map.values()),
-            key=lambda x: float(x.price)
-        )[:limit]
+        # If we have fewer than limit items, fill with highest-rated items from any category
+        if len(popular_items) < limit:
+            remaining = limit - len(popular_items)
+            
+            # Get all items with ratings, excluding already selected ones
+            selected_item_ids = [item.item_id for item in popular_items]
+            
+            additional_items = db.session.query(
+                ProductItem,
+                func.avg(Feedback.no_of_stars).label('avg_rating'),
+                func.count(Feedback.feedback_id).label('review_count')
+            ).outerjoin(
+                Feedback, ProductItem.item_id == Feedback.item_id
+            ).filter(
+                ~ProductItem.item_id.in_(selected_item_ids) if selected_item_ids else True
+            ).group_by(
+                ProductItem.item_id
+            ).having(
+                func.count(Feedback.feedback_id) > 0  # Only items with at least one review
+            ).order_by(
+                desc('avg_rating'), desc('review_count')
+            ).limit(remaining).all()
+            
+            for item_with_rating in additional_items:
+                if len(popular_items) >= limit:
+                    break
+                popular_items.append(item_with_rating[0])
         
-        return popular_items
+        # If still fewer than limit, add items without reviews (by price, lowest first)
+        if len(popular_items) < limit:
+            remaining = limit - len(popular_items)
+            selected_item_ids = [item.item_id for item in popular_items]
+            
+            items_without_reviews = ProductItem.query.filter(
+                ~ProductItem.item_id.in_(selected_item_ids) if selected_item_ids else True
+            ).order_by(ProductItem.price).limit(remaining).all()
+            
+            popular_items.extend(items_without_reviews)
+        
+        return popular_items[:limit]
 

@@ -56,11 +56,16 @@ class ProductService:
 
     @staticmethod
     def update_item(item_id, data):
-        """Update a product item"""
+        """Update a product item - only allows product_name and price to be edited"""
         item = ProductRepository.get_item_by_id(item_id)
         if not item:
             return None
-        return ProductRepository.update_item(item, data)
+        
+        # Only allow product_name and price to be updated
+        allowed_fields = ['product_name', 'price']
+        filtered_data = {k: v for k, v in data.items() if k in allowed_fields}
+        
+        return ProductRepository.update_item(item, filtered_data)
 
     @staticmethod
     def delete_item(item_id):

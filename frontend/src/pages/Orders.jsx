@@ -183,13 +183,6 @@ const Orders = () => {
   return (
     <div className="orders">
       <div className="orders-container">
-        <div className="orders-header">
-          <h1>Your Orders</h1>
-          <button className="menu-btn" onClick={() => navigate('/menu')}>
-            Browse Menu
-          </button>
-        </div>
-
         {showPhoneInput && !localStorage.getItem('customerId') ? (
           <div className="no-orders">
             <div style={{ fontSize: '64px', marginBottom: '20px' }}>📱</div>

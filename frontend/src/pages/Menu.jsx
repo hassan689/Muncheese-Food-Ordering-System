@@ -574,11 +574,6 @@ const Menu = () => {
                 <span className="total-amount">RS {total.toFixed(2)}</span>
               </div>
 
-              <button className="free-item-button">
-                Choose your free item..
-                <BsArrowRight className="arrow-icon" />
-              </button>
-
               <button 
                 className="checkout-button"
                 onClick={handleCheckout}

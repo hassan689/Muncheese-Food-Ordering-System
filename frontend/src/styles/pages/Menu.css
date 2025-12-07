@@ -315,8 +315,9 @@
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: wrap !important;
-  gap: 8px; 
-  margin-top: 12px;
+  gap: 12px; 
+  margin-top: 16px;
+  margin-bottom: 8px;
   width: 100%;
   align-items: center;
   justify-content: flex-start;
@@ -333,35 +334,38 @@
 
 .size-option-container {
   background: #03081f;
-  border: 1px solid #8e8e8e;
-  border-radius: 8px;
-  padding: 8px 16px;
+  border: 2px solid #03081f;
+  border-radius: 12px;
+  padding: 10px 18px;
   display: flex !important;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  min-height: 42px;
+  gap: 12px;
+  min-height: 48px;
   overflow: hidden;
   flex-shrink: 0;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex: 0 0 auto;
-  min-width: 140px;
+  min-width: 150px;
   text-align: left;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .size-option-container:hover {
   background: #050a2f;
   border-color: #ffb800;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(255, 184, 0, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
 }
 
 .size-option-container.selected {
-  background: #ffb800;
+  background: linear-gradient(135deg, #ffb800 0%, #ffa000 100%);
   border-color: #ffb800;
-  box-shadow: 0 2px 8px rgba(255, 184, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(255, 184, 0, 0.5);
+  transform: translateY(-2px);
 }
 
 .size-option-container.selected .size-text {
@@ -371,6 +375,7 @@
 
 .size-option-container.selected .price-badge-yellow {
   background: #03081f;
+  box-shadow: 0 2px 6px rgba(3, 8, 31, 0.3);
 }
 
 .size-option-container.selected .price-amount {
@@ -378,24 +383,27 @@
 }
 
 .size-text {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: white;
   display: flex;
   align-items: center;
   white-space: nowrap;
+  letter-spacing: 0.3px;
 }
 
 .price-badge-yellow {
   background: #ffb800;
-  border-radius: 10px;
-  padding: 4px 12px;
-  min-width: 70px;
-  height: 28px;
+  border-radius: 8px;
+  padding: 5px 14px;
+  min-width: 75px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 }
 
 .price-amount {
@@ -403,6 +411,7 @@
   font-weight: 700;
   color: white;
   white-space: nowrap;
+  letter-spacing: 0.2px;
 }
 
 .add-to-cart-main-button {
@@ -588,6 +597,7 @@
   width: 100%;
   box-sizing: border-box;
   max-width: 100%;
+  align-self: start;
 }
 
 .cart-panel-header {
@@ -617,8 +627,6 @@
   flex-direction: column;
   gap: 16px;
   margin-bottom: 20px;
-  max-height: 400px;
-  overflow-y: auto;
 }
 
 .cart-item-row {
@@ -964,9 +972,10 @@
   }
   
   .size-option-container {
-    min-height: 40px;
-    padding: 8px 16px;
-    gap: 8px;
+    min-height: 44px;
+    padding: 9px 16px;
+    gap: 10px;
+    min-width: 140px;
   }
   
   .size-text {
@@ -1134,9 +1143,10 @@
   }
   
   .size-option-container {
-    min-height: 38px;
-    padding: 7px 14px;
-    gap: 8px;
+    min-height: 42px;
+    padding: 8px 14px;
+    gap: 10px;
+    min-width: 130px;
   }
   
   .size-text {
@@ -1446,7 +1456,8 @@
     flex-direction: row !important;
     flex-wrap: wrap !important;
     gap: 10px;
-    margin-top: 12px;
+    margin-top: 14px;
+    margin-bottom: 8px;
     align-items: center;
     justify-content: flex-start;
     width: 100%;
@@ -1455,12 +1466,11 @@
   .size-option-container {
     display: flex !important;
     flex-direction: row !important;
-  }
-  
-  .size-option-container {
-    min-height: 36px;
-    padding: 6px 12px;
-    gap: 8px;
+    min-height: 40px;
+    padding: 8px 14px;
+    gap: 10px;
+    min-width: 120px;
+    border-radius: 10px;
   }
   
   .size-text {

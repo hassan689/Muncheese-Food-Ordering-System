@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { FaHome, FaShoppingBag, FaUser } from 'react-icons/fa'
+import { FaHome, FaShoppingBag } from 'react-icons/fa'
 import { MdRestaurantMenu } from 'react-icons/md'
 import weblogo from '../../assets/images/logo/weblogo.png'
 import '../../styles/components/common/Navbar.css'
@@ -7,8 +7,13 @@ import '../../styles/components/common/Navbar.css'
 const Navbar = () => {
   const location = useLocation()
   
+  // Hide navbar on login page
+  if (location.pathname === '/login') {
+    return null
+  }
+  
   // Pages with yellow backgrounds (navbar should be white)
-  const yellowBackgroundPages = ['/', '/home', '/login', '/register', '/contact', '/feedback']
+  const yellowBackgroundPages = ['/', '/home', '/register', '/contact', '/feedback']
   
   // Check if current page has yellow background
   const hasYellowBackground = yellowBackgroundPages.includes(location.pathname)
@@ -68,17 +73,11 @@ const Navbar = () => {
               <li><Link to="/admin/customers">Customers</Link></li>
             </>
           )}
-          {isAdmin ? (
+          {isAdmin && (
             <li>
               <button onClick={handleLogout} className="logout-btn">
                 Logout
               </button>
-            </li>
-          ) : (
-            <li>
-              <Link to="/login">
-                <FaUser className="nav-icon" />
-              </Link>
             </li>
           )}
         </ul>
