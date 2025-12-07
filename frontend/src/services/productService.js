@@ -36,5 +36,11 @@ export const productService = {
     const response = await api.get(`/api/products/items/${itemId}`)
     return response.data
   },
+
+  // Get popular items for landing page
+  getPopularItems: async (limit = 4) => {
+    const response = await api.get(`/api/products/items/popular?limit=${limit}`)
+    return response.data
+  },
 }
 

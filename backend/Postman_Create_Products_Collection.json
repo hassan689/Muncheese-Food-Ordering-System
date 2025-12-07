@@ -1,0 +1,1002 @@
+{
+	"info": {
+		"_postman_id": "create-products-collection-2024",
+		"name": "Create Products - Complete Menu Items",
+		"description": "Postman collection to create all menu items. Images are automatically uploaded to Cloudinary when creating products. Just select image files and fill in product details.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Pizza Category (3 Sizes Each)",
+			"item": [
+				{
+					"name": "Chicken Tikka Pizza",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Chicken Tikka Pizza",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Delicious chicken tikka pizza with marinated chicken pieces",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Pizza",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "12.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "15.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "18.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": [],
+									"description": "Upload Small size image"
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": [],
+									"description": "Upload Medium size image"
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": [],
+									"description": "Upload Large size image"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Chicken Tikka Pizza with 3 sizes. Upload 3 images (one for each size) or use single 'file' for all sizes. Images are automatically uploaded to Cloudinary."
+					},
+					"response": []
+				},
+				{
+					"name": "Chicken Fajita Pizza",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Chicken Fajita Pizza",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Spicy chicken fajita pizza with bell peppers and onions",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Pizza",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "13.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "16.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "19.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Chicken Fajita Pizza"
+					},
+					"response": []
+				},
+				{
+					"name": "Malai Boti Pizza",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Malai Boti Pizza",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Creamy malai boti pizza with tender chicken pieces",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Pizza",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "14.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "17.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "20.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Malai Boti Pizza"
+					},
+					"response": []
+				},
+				{
+					"name": "Pepperoni Pizza",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Pepperoni Pizza",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Classic pepperoni pizza with spicy pepperoni slices",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Pizza",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "11.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "14.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "17.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Pepperoni Pizza"
+					},
+					"response": []
+				},
+				{
+					"name": "Peri Peri Pizza",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Peri Peri Pizza",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Spicy peri peri chicken pizza with tangy sauce",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Pizza",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "13.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "16.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "19.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Peri Peri Pizza"
+					},
+					"response": []
+				},
+				{
+					"name": "BBQ Pizza",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "BBQ Pizza",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "BBQ chicken pizza with smoky barbecue sauce",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Pizza",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "13.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "16.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "19.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create BBQ Pizza"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Burgers Category (3 Sizes Each)",
+			"item": [
+				{
+					"name": "Zinger Burger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Zinger Burger",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Spicy crispy zinger burger with special sauce",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Burgers",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "8.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "10.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "12.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Zinger Burger"
+					},
+					"response": []
+				},
+				{
+					"name": "Chicken Burger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Chicken Burger",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Classic chicken burger with fresh vegetables",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Burgers",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "7.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "9.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "11.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Chicken Burger"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Drinks Category (No Size)",
+			"item": [
+				{
+					"name": "Coca Cola",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Coca Cola",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Refreshing cola drink",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Drinks",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "2.99",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": [],
+									"description": "Upload image for Coca Cola"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Coca Cola product. Upload single image file."
+					},
+					"response": []
+				},
+				{
+					"name": "Sprite",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Sprite",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Refreshing lemon-lime drink",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Drinks",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "2.99",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Sprite product"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fries Category (3 Sizes Each)",
+			"item": [
+				{
+					"name": "Plain Fries",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Plain Fries",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Crispy golden french fries",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Fries",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "3.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "5.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "7.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Plain Fries"
+					},
+					"response": []
+				},
+				{
+					"name": "Cheese Fries",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Cheese Fries",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Crispy fries topped with melted cheese",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Fries",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "4.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "6.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "8.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Cheese Fries"
+					},
+					"response": []
+				},
+				{
+					"name": "Loaded Fries",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "Loaded Fries",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Fries loaded with cheese, bacon, and special sauce",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Fries",
+									"type": "text"
+								},
+								{
+									"key": "has_sizes",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "price_small",
+									"value": "5.99",
+									"type": "text"
+								},
+								{
+									"key": "price_medium",
+									"value": "7.99",
+									"type": "text"
+								},
+								{
+									"key": "price_large",
+									"value": "9.99",
+									"type": "text"
+								},
+								{
+									"key": "file_small",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_medium",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "file_large",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"products"
+							]
+						},
+						"description": "Create Loaded Fries"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	]
+}

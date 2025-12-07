@@ -18,29 +18,54 @@ export default function MenuAddItem({ isOpen, onClose, onSave}) {
     },
   });
 
+  const [imageFiles, setImageFiles] = useState({
+    file: null,
+    file_small: null,
+    file_medium: null,
+    file_large: null,
+  });
 
-  const handleSubmit = () => {
-    const payload = formData.has_sizes
-      ? {
-          product_name: formData.product_name,
-          description: formData.description,
-          category: formData.category,
-          has_sizes: true,
-          prices: {
-            Small: Number(formData.prices.Small),
-            Medium: Number(formData.prices.Medium),
-            Large: Number(formData.prices.Large),
-          },
-        }
-      : {
-          product_name: formData.product_name,
-          description: formData.description,
-          category: formData.category,
-          has_sizes: false,
-          price: Number(formData.price),
-        };
 
-    onSave(payload);
+  const handleImageChange = (e, fileKey) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFiles(prev => ({ ...prev, [fileKey]: file }));
+    }
+  };
+
+  const handleSubmit = async () => {
+    // Create FormData for file upload
+    const formDataToSend = new FormData();
+    
+    formDataToSend.append('product_name', formData.product_name);
+    formDataToSend.append('description', formData.description);
+    formDataToSend.append('category', formData.category);
+    formDataToSend.append('has_sizes', formData.has_sizes.toString());
+
+    // Add image files
+    if (formData.has_sizes) {
+      // For items with sizes, add size-specific images or single image
+      if (imageFiles.file) {
+        formDataToSend.append('file', imageFiles.file);
+      } else {
+        if (imageFiles.file_small) formDataToSend.append('file_small', imageFiles.file_small);
+        if (imageFiles.file_medium) formDataToSend.append('file_medium', imageFiles.file_medium);
+        if (imageFiles.file_large) formDataToSend.append('file_large', imageFiles.file_large);
+      }
+      
+      formDataToSend.append('price_small', formData.prices.Small);
+      formDataToSend.append('price_medium', formData.prices.Medium);
+      formDataToSend.append('price_large', formData.prices.Large);
+    } else {
+      // For single item, add single image
+      if (imageFiles.file) {
+        formDataToSend.append('file', imageFiles.file);
+      }
+      formDataToSend.append('price', formData.price);
+    }
+
+    // Call onSave with FormData
+    await onSave(formDataToSend);
     onClose();
   };
 
@@ -107,6 +132,63 @@ export default function MenuAddItem({ isOpen, onClose, onSave}) {
               <option value="no">No (Single Price)</option>
               <option value="yes">Yes (Small/Medium/Large)</option>
             </select>
+          </div>
+
+          {/* Image Upload Section */}
+          <div className="form-group">
+            <label>Product Image{formData.has_sizes ? ' (Optional - upload one for all sizes or separate for each)' : ''}</label>
+            {formData.has_sizes ? (
+              <>
+                <div style={{ marginBottom: '12px' }}>
+                  <label style={{ fontSize: '14px', marginBottom: '8px', display: 'block' }}>Single Image (for all sizes):</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageChange(e, 'file')}
+                    style={{ width: '100%', padding: '8px' }}
+                  />
+                </div>
+                <div style={{ marginBottom: '12px' }}>
+                  <label style={{ fontSize: '14px', marginBottom: '8px', display: 'block' }}>Or upload separate images:</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                    <div>
+                      <label style={{ fontSize: '12px', display: 'block', marginBottom: '4px' }}>Small:</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageChange(e, 'file_small')}
+                        style={{ width: '100%', padding: '6px', fontSize: '12px' }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '12px', display: 'block', marginBottom: '4px' }}>Medium:</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageChange(e, 'file_medium')}
+                        style={{ width: '100%', padding: '6px', fontSize: '12px' }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '12px', display: 'block', marginBottom: '4px' }}>Large:</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageChange(e, 'file_large')}
+                        style={{ width: '100%', padding: '6px', fontSize: '12px' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageChange(e, 'file')}
+                style={{ width: '100%', padding: '8px' }}
+              />
+            )}
           </div>
 
           {formData.has_sizes ? (

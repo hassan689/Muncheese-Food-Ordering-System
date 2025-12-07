@@ -1,8 +1,12 @@
 // Order Card Component
+import { useState } from "react";
 import Card from "../../../components/ui/Card";
+import OrderDetailsModal from "./OrderDetailsModal";
 import "../../../styles/components/admin/Orders/OrderCard.css";
 
 const OrderCard = ({ order, onAccept, onReject, onComplete }) => {
+  const [showDetails, setShowDetails] = useState(false);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString('en-US', {
@@ -35,7 +39,7 @@ const OrderCard = ({ order, onAccept, onReject, onComplete }) => {
     if (order.status === 'completed') {
       return (
         <div className="status-badge completed">
-          ✓ Accepted
+          ✓ COMPLETED
         </div>
       );
     }
@@ -53,36 +57,67 @@ const OrderCard = ({ order, onAccept, onReject, onComplete }) => {
   };
 
   return (
-    <Card className="order-card">
-      <div className="order-header">
-        <div>
-          <h3>Order #{order.order_id}</h3>
-          <p className="order-date">{formatDate(order.created_at)}</p>
+    <>
+      <Card className="order-card">
+        <div className="order-header">
+          <div>
+            {order.status !== 'rejected' && (
+              <h3>Order #{order.order_id}</h3>
+            )}
+            {order.status === 'rejected' && (
+              <h3>Order</h3>
+            )}
+            <p className="order-date">{formatDate(order.created_at)}</p>
+          </div>
+          <button 
+            className="btn-details"
+            onClick={() => setShowDetails(true)}
+            title="View Order Details"
+          >
+            Details
+          </button>
         </div>
-      </div>
 
       <div className="order-items">
-        {order.items.map((item, index) => (
-          <div key={index} className="order-item">
-            <div className="item-details">
-              <h4>{item.name}</h4>
-              <p>{item.description}</p>
+        {order.items && order.items.length > 0 ? (
+          order.items.map((item, index) => (
+            <div key={item.order_item_id || index} className="order-item">
+              <div className="item-details">
+                <h4>{item.product_name || item.name || 'Unknown Item'}</h4>
+                <p>{item.description || item.size ? `${item.size} size` : ''}</p>
+                {item.size && <p className="item-size">Size: {item.size}</p>}
+              </div>
+              <div className="item-price-qty">
+                <span className="item-price">Rs{(item.price || 0).toFixed(2)}</span>
+                <span className="item-qty">Qty: {item.quantity || 1}</span>
+              </div>
             </div>
-            <div className="item-price-qty">
-              <span className="item-price">${item.price.toFixed(2)}</span>
-              <span className="item-qty">Qty: {item.quantity}</span>
-            </div>
+          ))
+        ) : (
+          <div className="order-item">
+            <p>No items in this order</p>
           </div>
-        ))}
+        )}
       </div>
 
       <div className="order-footer">
-        <span className="items-count">X{order.items.length} Items</span>
+        <div className="order-total-info">
+          <span className="items-count">{order.items ? order.items.length : 0} Items</span>
+          <span className="order-total">Total: Rs{(order.total_amount || 0).toFixed(2)}</span>
+        </div>
         <div className="order-actions">
           {getStatusButton()}
         </div>
       </div>
     </Card>
+    
+    {showDetails && (
+      <OrderDetailsModal
+        order={order}
+        onClose={() => setShowDetails(false)}
+      />
+    )}
+    </>
   );
 };
 

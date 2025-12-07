@@ -18,7 +18,7 @@ const Reviews = () => {
           const transformedReviews = data.featured_reviews.map((review, index) => ({
             id: review.feedback_id,
             name: review.customer_name || 'Customer',
-            location: 'Karachi, Pakistan', // Default location
+            location: 'Lahore, Pakistan', // Default location
             rating: review.no_of_stars || 5,
             comment: review.feedback_message || 'Great food and service!',
             avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(review.customer_name || 'Customer')}&background=ffb800&color=fff`,

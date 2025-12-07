@@ -15,7 +15,9 @@ class OrderRepository:
 
     @staticmethod
     def update_status(order, new_status):
+        from datetime import datetime
         order.status = new_status
+        order.status_updated_at = datetime.utcnow()  # Update timestamp when status changes
         db.session.commit()
         return order
 

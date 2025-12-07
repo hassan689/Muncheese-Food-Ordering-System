@@ -18,7 +18,7 @@ const OrderStatusTabs = ({ orders, selectedOrder, onOrderSelect }) => {
     <div className="order-tabs">
       <div className="tabs-container">
         {orders
-          .filter((order) => order.status !== "completed") // skip completed orders
+          .filter((order) => order.status !== "completed" && order.status !== "rejected") // skip completed and rejected orders
           .map((order) => (
             <button
               key={order.order_id}

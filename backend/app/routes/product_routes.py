@@ -36,3 +36,7 @@ def get_products_by_category():
 def get_all_categories():
     return ProductController.get_all_categories()
 
+@product_bp.route("/items/popular", methods=["GET"])
+def get_popular_items():
+    return ProductController.get_popular_items()
+

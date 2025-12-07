@@ -1,6 +1,6 @@
 .navbar {
   font-family: 'Poppins', sans-serif;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   position: absolute;
   top: 1em;
   left: 200px;
@@ -21,13 +21,18 @@
   background-color: white;
 }
 .navbar-title {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #03081f;
   text-decoration: none;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.navbar-title h1 {
+  font-size: 1.1rem;
+  margin: 0;
 }
 .navbar-container {
   max-width: 1200px;
@@ -45,7 +50,7 @@
 }
 
 .logo-img {
-  height: 40px;
+  height: 32px;
   width: auto;
   object-fit: contain;
 }
@@ -53,7 +58,7 @@
 .navbar-menu {
   display: flex;
   list-style: none;
-  gap: 2rem;
+  gap: 1.5rem;
   margin: 0;
   padding: 0;
 }
@@ -61,13 +66,13 @@
 .navbar-menu a {
   color: #03081f;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   transition: all 0.3s;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
+  gap: 6px;
+  padding: 5px 10px;
   border-radius: 20px;
 }
 
@@ -84,7 +89,7 @@
 }
 
 .nav-icon {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 @media (max-width: 768px) {

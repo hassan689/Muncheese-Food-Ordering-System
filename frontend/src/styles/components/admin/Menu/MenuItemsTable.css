@@ -74,22 +74,34 @@ tbody tr:hover {
 .btn-delete {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 8px 10px;
+  border-radius: 6px;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
 }
 
 .btn-edit:hover {
   background: #e3f2fd;
+  color: #1976d2;
 }
 
 .btn-delete:hover {
   background: #ffebee;
+  color: #d32f2f;
 }
 
 .btn-delete.confirm {
   background: #ff5252;
   color: white;
+}
+
+.btn-edit svg,
+.btn-delete svg {
+  width: 18px;
+  height: 18px;
 }

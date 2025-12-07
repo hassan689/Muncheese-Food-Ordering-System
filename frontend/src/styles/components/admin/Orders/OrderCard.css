@@ -17,6 +17,7 @@
   margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 1px solid #f0f0f0;
+  position: relative;
 }
 
 .order-header h3 {
@@ -189,4 +190,23 @@
   font-size: 13px;
   color: #666;
   font-weight: 500;
+}
+
+.btn-details {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-details:hover {
+  background: #1565c0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.3);
 }

@@ -42,6 +42,22 @@
 
 .category-icon {
   font-size: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.category-icon svg {
+  width: 100%;
+  height: 100%;
+  color: inherit;
+}
+
+.category-card.active .category-icon svg {
+  color: white;
 }
 
 .category-info h3 {

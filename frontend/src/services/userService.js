@@ -11,6 +11,11 @@ export const userService = {
     return response.data
   },
 
+  adminLogin: async (username, password) => {
+    const response = await api.post('/api/admin/login', { username, password })
+    return response.data
+  },
+
   getAllCustomers: async () => {
     const response = await api.get('/api/customers')
     return response.data

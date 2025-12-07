@@ -1,379 +1,152 @@
 import OrderCardsGrid from "../../components/admin/Orders/OrderCardGrid";
 import OrderStatusTabs from "../../components/admin/Orders/OrderStatusTabs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminLayout from "../../layouts/admin/Layout";
+import { orderService } from "../../services/orderService";
+import api from "../../services/api";
 import "../../styles/pages/admin/Orders.css";
 
 const OrdersPage = () => {
-  const [orders, setOrders] = useState([
-    {
-      order_id: 345,
-      customer_id: "C001",
-      status: "completed",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        }
-      ],
-    },
-    {
-      order_id: 400,
-      customer_id: "C001",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        }
-      ],
-    },
-      {
-      order_id: 400,
-      customer_id: "C001",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        }
-      ],
-    },
-    {
-      order_id: 400,
-      customer_id: "C001",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        }
-      ],
-    },
-    {
-      order_id: 400,
-      customer_id: "C001",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        }
-      ],
-    },
-    {
-      order_id: 400,
-      customer_id: "C001",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        }
-      ],
-    },
-      {
-      order_id: 400,
-      customer_id: "C001",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        }
-      ],
-    },
-    {
-      order_id: 346,
-      customer_id: "C002",
-      status: "rejected",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        }
-      ],
-    },
-    {
-      order_id: 349,
-      customer_id: "C005",
-      status: "accepted",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-      ],
-    },
-    {
-      order_id: 350,
-      customer_id: "C006",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-      ],
-    },
-    {
-      order_id: 351,
-      customer_id: "C007",
-      status: "rejected",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-      ],
-    },
-    {
-      order_id: 352,
-      customer_id: "C008",
-      status: "pending",
-      total_amount: 10.6,
-      created_at: "2023-02-05T08:28:00",
-      items: [
-        {
-          name: "Vegetable Mixups",
-          description: "Vegetable Fritters with Egg",
-          price: 5.3,
-          quantity: 1,
-        },
-        {
-          name: "Chinese Takeout Disj",
-          description: "Fresh Prawn mix salad",
-          price: 5.3,
-          quantity: 1,
-        },
-      ],
-    },
-  ]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
-  const [selectedOrder, setSelectedOrder] = useState(null);                     // This state variable is responsible whenever order is updated to re-render
+  // Fetch orders from API
+  const fetchOrders = async () => {
+    try {
+      const adminUserId = localStorage.getItem('adminUserId') || '1'; // Get admin user ID
+      
+      // Fetch all orders using admin endpoint
+      const response = await api.get('/api/admin/orders', {
+        headers: {
+          'user-id': adminUserId
+        }
+      });
+      
+      setOrders(response.data || []);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Initial fetch and set up polling
+  useEffect(() => {
+    // Initial fetch
+    setLoading(true);
+    fetchOrders();
+
+    // Set up polling every 5 seconds
+    const intervalId = setInterval(() => {
+      fetchOrders();
+    }, 5000); // 5000ms = 5 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleAccept = async (orderId) => {
     // Approve/ Accept Orders
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/review`, {
-        method: "POST",
-        headers: {
-          "user-id": 1,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ action: "approve" })
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response}`);
-      }
-
-      const data = await response.json();
-      console.log("Order Accepted:", data);
-      // Updating on frontend (envokes re-render)
-      setOrders(
-        orders.map((order) =>
-          order.order_id === orderId ? { ...order, status: "accepted" } : order
-        )
+      const adminUserId = localStorage.getItem('adminUserId') || '1';
+      const response = await api.post(`/api/admin/orders/${orderId}/review`, 
+        { action: "approve" },
+        {
+          headers: {
+            "user-id": adminUserId
+          }
+        }
       );
+
+      console.log("Order Accepted:", response.data);
+      // Refresh orders
+      await refreshOrders();
     } catch (error) {
-      console.error("Failed to add product:", error);
+      console.error("Failed to accept order:", error);
+      alert("Failed to accept order. Please try again.");
     }
   };
 
   const handleReject = async (orderId) => {
     // Reject/ Decline Orders
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/review`, {
-        method: "POST",
-        headers: {
-          "user-id": 1,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ action: "reject" })
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response}`);
-      }
-
-      const data = await response.json();
-      console.log("Order Rejected:", data);
-      // Updating on frontend (envokes re-render)
-      setOrders(
-        orders.map((order) =>
-          order.order_id === orderId ? { ...order, status: "rejected" } : order
-        )
+      const adminUserId = localStorage.getItem('adminUserId') || '1';
+      const response = await api.post(`/api/admin/orders/${orderId}/review`,
+        { action: "reject" },
+        {
+          headers: {
+            "user-id": adminUserId
+          }
+        }
       );
+
+      console.log("Order Rejected:", response.data);
+      // Remove rejected order from display immediately
+      setOrders(orders.filter((order) => order.order_id !== orderId));
     } catch (error) {
-      console.error("Failed to add product:", error);
+      console.error("Failed to reject order:", error);
+      alert("Failed to reject order. Please try again.");
     }
   };
 
-  /* TO BE IMPLEMENTED */
-  const handleComplete = async (orderId) => {
-    // // Completed Orders
-    // try {
-    //   const response = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/review`, {
-    //     method: "POST",
-    //     headers: {
-    //       "user-id": 1,
-    //       "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({ action: "completed" })
-    //   });
-
-    //   if (!response.ok) {
-    //     throw new Error(`Error: ${response}`);
-    //   }
-
-    //   const data = await response.json();
-    //   console.log("Order Completed:", data);
-    //   // Updating on frontend (envokes re-render)
-    //   setOrders(orders.filter((order) => order.order_id !== orderId));
-    // } catch (error) {
-    //   console.error("Failed to add product:", error);
-    // }
-      setOrders(orders.filter((order) => order.order_id !== orderId));
+  // Refresh orders function
+  const refreshOrders = async () => {
+    try {
+      const adminUserId = localStorage.getItem('adminUserId') || '1';
+      const response = await api.get('/api/admin/orders', {
+        headers: {
+          'user-id': adminUserId
+        }
+      });
+      setOrders(response.data || []);
+    } catch (error) {
+      console.error('Error refreshing orders:', error);
+    }
   };
 
+  const handleComplete = async (orderId) => {
+    // Mark order as completed
+    try {
+      const adminUserId = localStorage.getItem('adminUserId') || '1';
+      const response = await api.post(`/api/admin/orders/${orderId}/review`,
+        { action: "completed" },
+        {
+          headers: {
+            "user-id": adminUserId
+          }
+        }
+      );
+
+      console.log("Order Completed:", response.data);
+      // Refresh orders to update status
+      await refreshOrders();
+    } catch (error) {
+      console.error("Failed to complete order:", error);
+      alert("Failed to mark order as completed. Please try again.");
+    }
+  };
+
+  // Filter out rejected and completed orders from display
   const displayedOrders = orders.filter(
-    (order) => order.status !== "completed"
+    (order) => order.status !== "completed" && order.status !== "rejected"
   );
+
+  if (loading) {
+    return (
+      <AdminLayout title="Orders">
+        <div className="orders-page">
+          <div className="page-header">
+            <h1>Order List</h1>
+          </div>
+          <div style={{ padding: '20px', textAlign: 'center' }}>
+            <p>Loading orders...</p>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout title="Orders">
@@ -382,18 +155,26 @@ const OrdersPage = () => {
           <h1>Order List</h1>
         </div>
 
-        <OrderStatusTabs
-          orders={orders}
-          selectedOrder={selectedOrder}
-          onOrderSelect={setSelectedOrder}
-        />
+        {orders.length === 0 ? (
+          <div style={{ padding: '20px', textAlign: 'center' }}>
+            <p>No orders found</p>
+          </div>
+        ) : (
+          <>
+            <OrderStatusTabs
+              orders={displayedOrders}
+              selectedOrder={selectedOrder}
+              onOrderSelect={setSelectedOrder}
+            />
 
-        <OrderCardsGrid
-          orders={displayedOrders}
-          onAccept={handleAccept}
-          onReject={handleReject}
-          onComplete={handleComplete}
-        />
+            <OrderCardsGrid
+              orders={displayedOrders}
+              onAccept={handleAccept}
+              onReject={handleReject}
+              onComplete={handleComplete}
+            />
+          </>
+        )}
       </div>
     </AdminLayout>
   );

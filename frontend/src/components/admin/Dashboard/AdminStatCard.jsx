@@ -14,7 +14,7 @@ const AdminStatCard = ({
       <div className="stat-header">
         <div className="stat-info">
           <h3>{title}</h3>
-          <div className="stat-value">{value}</div>
+          <div className="stat-value">Rs. {value}</div>
         </div>
 
         <div>

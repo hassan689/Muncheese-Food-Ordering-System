@@ -71,7 +71,7 @@ const Feedback = () => {
     }, 0)
     
     const discount = 0
-    const deliveryFee = 2.50
+    const deliveryFee = 150
     return subtotal - discount + deliveryFee
   }
 

@@ -5,10 +5,19 @@ const OrdersTable = ({ orders }) => {
   const [sortedOrders, setSortedOrders] = useState([])
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' })
 
-  // Update sorted orders when data changes
+  // Update sorted orders when data changes - limit to 5 most recent
   useEffect(() => {
     if (orders && orders.length > 0) {
-      setSortedOrders([...orders])
+      // Sort by order date (most recent first) and limit to 5
+      const sorted = [...orders].sort((a, b) => {
+        // Parse dates for comparison (format: "DD. MM. YYYY")
+        const dateA = new Date(a.orderDate.split('.').reverse().join('-'));
+        const dateB = new Date(b.orderDate.split('.').reverse().join('-'));
+        return dateB - dateA; // Most recent first
+      }).slice(0, 5); // Limit to 5 most recent
+      setSortedOrders(sorted)
+    } else {
+      setSortedOrders([])
     }
   }, [orders])
 

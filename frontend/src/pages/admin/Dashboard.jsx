@@ -1,111 +1,103 @@
-import { useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import AdminLayout from "../../layouts/admin/Layout";
 import AdminStatCard from "../../components/admin/Dashboard/AdminStatCard";
 import AdminOverviewChart from "../../components/admin/Dashboard/AdminOverviewChart";
 import CashIcon from "../../assets/images/admin/Dashboard/cash.svg";
 import RevenueIcon from "../../assets/images/admin/Dashboard/revenue.svg";
+import { orderService } from "../../services/orderService";
 import "../../styles/pages/admin/Dashboard.css";
 
-// importing data from generate file
-import {
-  generateYearDailyData,
-  aggregateMonthly,
-  aggregateWeekly,
-} from "../../utils/generateData";
-
-/*
-format of data: (in increasing order of dates)
-[
-  {
-      data: "2025-12-15",
-      sales: 3000
-  },
-  {
-      data: "2025-12-16",
-      sales: 4000
-  },
-  {
-      data: "2025-12-17",
-      sales: 5000
-  }
-]
-*/
 function normalize(data) {
-  const max = Math.max(...data);
+  if (!data || data.length === 0) return [];
+  const max = Math.max(...data.filter(v => v > 0));
+  if (max === 0) return data.map(() => 0);
   return data.map((v) => Math.round((v / max) * 100));
 }
 
 const AdminDashboard = () => {
-  const initialDailyData = useMemo(
-    () => generateYearDailyData({ year: 2025 }),
-    []
-  );
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const sortedDailyData = useMemo(() => {
-    return [...initialDailyData].sort((a, b) => {
-      return new Date(a.date) - new Date(b.date);
-    });
-  }, [initialDailyData]);
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const data = await orderService.getDashboardStats();
+        setStats(data);
+      } catch (err) {
+        console.error('Error fetching dashboard stats:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchStats();
+  }, []);
+
+  // Process data for charts
   const dailyData = useMemo(() => {
-    return sortedDailyData.slice(-30).map((d) => ({
+    if (!stats?.daily_data) return [];
+    return stats.daily_data.map((d) => ({
       label: d.date,
       sales: d.sales,
     }));
-  }, [sortedDailyData]);
+  }, [stats]);
 
   const weeklyData = useMemo(() => {
-    return aggregateWeekly(sortedDailyData)
-      .slice(-12)
-      .map((w) => ({
-        label: w.label,
-        sales: w.sales,
-      }));
-  }, [sortedDailyData]);
+    if (!stats?.weekly_data) return [];
+    return stats.weekly_data.map((w) => ({
+      label: w.label,
+      sales: w.sales,
+    }));
+  }, [stats]);
 
   const monthlyData = useMemo(() => {
-    return aggregateMonthly(sortedDailyData)
-      .slice(-12)
-      .map((m) => ({
-        label: m.label,
-        sales: m.sales,
-      }));
-  }, [sortedDailyData]);
-
-  // last 12 days and last 12 weeks sales (raw numbers)
-  const last12DaysSales = useMemo(
-    () => sortedDailyData.slice(-12).map((d) => d.sales),
-    [sortedDailyData]
-  );
-
-  const last12Weeks = useMemo(
-    () =>
-      aggregateWeekly(sortedDailyData)
-        .slice(-12)
-        .map((w) => w.sales),
-    [sortedDailyData]
-  );
-
-  // today's sales and last week's revenue (raw numbers)
-  const todaySales = useMemo(
-    () => sortedDailyData[sortedDailyData.length - 1]?.sales || 0,
-    [sortedDailyData]
-  );
-
-  const lastWeekRevenue = useMemo(
-    () => last12Weeks[last12Weeks.length - 1] || 0,
-    [last12Weeks]
-  );
+    if (!stats?.monthly_data) return [];
+    return stats.monthly_data.map((m) => ({
+      label: m.label,
+      sales: m.sales,
+    }));
+  }, [stats]);
 
   // Normalized arrays for mini-charts (0..100)
   const normalizedLast12Days = useMemo(
-    () => normalize(last12DaysSales),
-    [last12DaysSales]
+    () => normalize(stats?.last_12_days_sales || []),
+    [stats]
   );
   const normalizedLast12Weeks = useMemo(
-    () => normalize(last12Weeks),
-    [last12Weeks]
+    () => normalize(stats?.last_12_weeks_sales || []),
+    [stats]
   );
+
+  const todaySales = Math.round(stats?.today_sales || 0);
+  const lastWeekRevenue = Math.round(stats?.last_week_revenue || 0);
+
+  if (loading) {
+    return (
+      <AdminLayout title="Dashboard">
+        <div className="admin-dashboard">
+          <div style={{ padding: '40px', textAlign: 'center' }}>
+            <p>Loading dashboard data...</p>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <AdminLayout title="Dashboard">
+        <div className="admin-dashboard">
+          <div style={{ padding: '40px', textAlign: 'center', color: 'red' }}>
+            <p>Error loading dashboard: {error}</p>
+            <button onClick={() => window.location.reload()}>Retry</button>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout title="Dashboard">

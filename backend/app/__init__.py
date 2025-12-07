@@ -34,6 +34,7 @@ def create_app():
         
         # ADD THESE NEW ONES:
         from .models.order import Order
+        from .models.order_item import OrderItem
         from .models.payment import Payment
         from .models.delivery_info import DeliveryInfo
         # -------------------------------------------------

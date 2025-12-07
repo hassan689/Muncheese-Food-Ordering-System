@@ -47,3 +47,8 @@ class UserRepository:
         db.session.delete(user)
         db.session.commit()
 
+    @staticmethod
+    def get_admin_user():
+        """Get admin user by role"""
+        return User.query.filter_by(role="admin").first()
+

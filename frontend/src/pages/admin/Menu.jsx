@@ -4,6 +4,15 @@ import MenuCategories from "../../components/admin/Menu/MenuCategories";
 import MenuItemsTable from "../../components/admin/Menu/MenuItemsTable";
 import MenuAddItem from "../../components/admin/Menu/MenuAddItem";
 import MenuEditItem from "../../components/admin/Menu/MenuEditItem";
+import { 
+  FaPizzaSlice, 
+  FaHamburger, 
+  FaCookie, 
+  FaGlassWhiskey,
+  FaUtensils,
+  FaDrumstickBite
+} from "react-icons/fa";
+import api from "../../services/api";
 import "../../styles/pages/admin/Menu.css";
 
 const MenuPage = () => {
@@ -38,25 +47,28 @@ const MenuPage = () => {
         if (!response.ok) throw new Error("Failed to fetch categories");
         const data = await response.json();
 
+        // Icon mapping for categories
+        const getCategoryIcon = (categoryName) => {
+          const iconMap = {
+            "Pizza": FaPizzaSlice,
+            "Burgers": FaHamburger,
+            "Burger": FaHamburger,
+            "Fries": FaDrumstickBite,
+            "Desserts": FaCookie,
+            "Drinks": FaGlassWhiskey,
+            "All": FaUtensils,
+          };
+          return iconMap[categoryName] || FaUtensils;
+        };
+
         // Add 'All' category manually
-        const allCategory = { id: "all", name: "All", icon: "🍽️", count: menuItems.length };
+        const allCategory = { id: "all", name: "All", icon: FaUtensils, count: menuItems.length };
 
         // Map fetched categories to include count and optional icons
         const fetchedCategories = data['categories'].map((cat) => ({
           id: cat,
           name: cat,
-          icon:
-            cat === "Pizza"
-              ? "🍕"
-              : cat === "Burger"
-              ? "🍔"
-              : cat === "Fries"
-              ? "🍟"
-              : cat === "Desserts"
-              ? "🍰"
-              : cat === "Drinks"
-              ? "🥤"
-              : "🍽️", // default icon
+          icon: getCategoryIcon(cat),
           count: menuItems.filter((i) => i.category === cat).length,
         }));
 
@@ -87,20 +99,23 @@ const MenuPage = () => {
   const handleDelete = async (item_id) => {
     // Saving Product in database
     try {
-      const response = await fetch(`http://localhost:5000/api/products/items/${item_id}`, {
-        method: "DELETE"
+      // Get admin user ID from localStorage for authentication
+      const adminUserId = localStorage.getItem('adminUserId') || '1';
+      
+      const response = await api.delete(`/api/products/items/${item_id}`, {
+        headers: {
+          'user-id': adminUserId
+        }
       });
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Product Deleted:", data);
+      console.log("Product Deleted:", response.data);
       // Updating on frontend (envokes re-render)
       setMenuItems(menuItems.filter((item) => item.item_id !== item_id));
+      alert("Item deleted successfully!");
     } catch (error) {
-      console.error("Failed to add product:", error);
+      console.error("Failed to delete product:", error);
+      const errorMessage = error.response?.data?.message || error.message || "Failed to delete item. Please try again.";
+      alert(errorMessage);
     }
   };
 
@@ -108,27 +123,46 @@ const MenuPage = () => {
   const handleSaveItem = async (formData) => {
     // Saving Product in database
     try {
-      const response = await fetch("http://localhost:5000/api/products/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-      });
+      // Get admin user ID from localStorage for authentication
+      const adminUserId = localStorage.getItem('adminUserId') || '1';
+      
+      // Create FormData object if formData is not already FormData
+      const apiFormData = new FormData();
+      apiFormData.append('product_name', formData.product_name);
+      apiFormData.append('description', formData.description);
+      apiFormData.append('category', formData.category);
+      apiFormData.append('has_sizes', formData.has_sizes);
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response}`);
+      if (formData.has_sizes) {
+        apiFormData.append('price_small', formData.prices.Small);
+        apiFormData.append('price_medium', formData.prices.Medium);
+        apiFormData.append('price_large', formData.prices.Large);
+        if (formData.file_small) apiFormData.append('file_small', formData.file_small);
+        if (formData.file_medium) apiFormData.append('file_medium', formData.file_medium);
+        if (formData.file_large) apiFormData.append('file_large', formData.file_large);
+      } else {
+        apiFormData.append('price', formData.price);
+        if (formData.file) apiFormData.append('file', formData.file);
       }
 
-      const data = await response.json();
-      console.log("Product added:", data);
+      const response = await api.post("/api/products/products", apiFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'user-id': adminUserId
+        }
+      });
+
+      console.log("Product added:", response.data);
       // Updating on frontend (envokes re-render)
-      setMenuItems([...menuItems, ...data.items]); // Make it Re-render
+      setMenuItems([...menuItems, ...response.data.items]); // Make it Re-render
+      alert("Product added successfully!");
       
       // Updating UI
       // setIsAddModalOpen(false);
     } catch (error) {
       console.error("Failed to add product:", error);
+      const errorMessage = error.response?.data?.message || error.message || "Failed to add product. Please try again.";
+      alert(errorMessage);
     }
   };
 
@@ -136,31 +170,31 @@ const MenuPage = () => {
   const handleEditItem = async (formData) => {
     // Saving Product in database
     try {
-      const response = await fetch(`http://localhost:5000/api/products/items/${editingItem.item_id}`, {
-        method: "PUT",
+      // Get admin user ID from localStorage for authentication
+      const adminUserId = localStorage.getItem('adminUserId') || '1';
+      
+      const response = await api.put(`/api/products/items/${editingItem.item_id}`, formData, {
         headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
+          "Content-Type": "application/json",
+          'user-id': adminUserId
+        }
       });
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Product Edited:", data);
+      console.log("Product Edited:", response.data);
 
       // Update frontend
       setMenuItems(menuItems.map(item =>
-        item.item_id === editingItem.item_id ? data : item
+        item.item_id === editingItem.item_id ? response.data : item
       ));
 
       // Reset editing state
-      setEditingItem(null); // or whatever state you use to track editing
-      setIsEditModalOpen(false); // if you have a modal open state
+      setEditingItem(null);
+      setIsEditModalOpen(false);
+      alert("Item updated successfully!");
     } catch (error) {
-      console.error("Failed to add product:", error);
+      console.error("Failed to edit product:", error);
+      const errorMessage = error.response?.data?.message || error.message || "Failed to update item. Please try again.";
+      alert(errorMessage);
     }
   };
 

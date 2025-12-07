@@ -49,29 +49,32 @@ const Checkout = () => {
     setIsSubmitting(true)
     try {
       // Step 1: Register/Create customer (or get existing)
-      let customerId = localStorage.getItem('customerId')
-      let customer = null
-
-      if (!customerId) {
-        // Register new customer
-        const customerData = {
-          name: formData.fullName,
-          phone: formData.phoneNumber,
-          address: formData.deliveryAddress
-        }
-        customer = await userService.register(customerData)
-        customerId = customer.user_id || customer.user?.user_id
-        
-        // Save customer info for future orders
-        localStorage.setItem('customerId', customerId.toString())
-        localStorage.setItem('customerPhone', formData.phoneNumber)
-        localStorage.setItem('customerInfo', JSON.stringify(formData))
+      // Always register/get customer to ensure we have the correct customer ID
+      const customerData = {
+        name: formData.fullName,
+        phone: formData.phoneNumber,
+        address: formData.deliveryAddress
       }
+      const customer = await userService.register(customerData)
+      const customerId = customer.user_id || customer.user?.user_id
+      
+      // Always update localStorage with the customer ID (whether new or existing)
+      localStorage.setItem('customerId', customerId.toString())
+      localStorage.setItem('customerPhone', formData.phoneNumber)
+      localStorage.setItem('customerInfo', JSON.stringify(formData))
 
-      // Step 2: Create order
+      // Step 2: Create order with items
+      // Prepare items from cart
+      const items = cart.map(item => ({
+        item_id: item.item_id || item.id,
+        quantity: item.quantity || 1,
+        price: item.price
+      }))
+      
       const orderData = {
         customer_id: parseInt(customerId),
-        total_amount: total
+        total_amount: total,
+        items: items
       }
       const orderResponse = await orderService.createOrder(orderData)
       const orderId = orderResponse.order_id
@@ -120,8 +123,31 @@ const Checkout = () => {
         return
       }
 
-      // Step 6: Clear cart and navigate to confirmation
+      // Step 6: Clear cart, reset form, clear localStorage, and navigate to confirmation
       clearCart()
+      
+      // Clear form fields
+      setFormData({
+        fullName: '',
+        phoneNumber: '',
+        deliveryAddress: '',
+        city: '',
+        postcode: ''
+      })
+      setSpecialInstructions('')
+      setPaymentMethod('cash')
+      setPaymentProof(null)
+      setPaymentProofPreview(null)
+      
+      // Clear customer info from localStorage so form is empty next time
+      localStorage.removeItem('customerInfo')
+      
+      // Clear file input if it exists
+      const fileInput = document.getElementById('payment-proof')
+      if (fileInput) {
+        fileInput.value = ''
+      }
+      
       navigate('/order-confirmation', {
         state: {
           orderData: {

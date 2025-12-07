@@ -12,7 +12,8 @@ class Payment(db.Model):
     method = db.Column(db.String(20)) # e.g., 'cash', 'online'
     
     # Nullable=True because 'cash' payments won't have a screenshot
-    screenshot_url = db.Column(db.String(255), nullable=True) 
+    # Increased length to 500 to support Cloudinary URLs
+    screenshot_url = db.Column(db.String(500), nullable=True) 
     
     amount = db.Column(db.Float, nullable=False)
     payment_date = db.Column(db.DateTime, default=datetime.utcnow)

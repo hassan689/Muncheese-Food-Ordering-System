@@ -44,3 +44,21 @@ class UserService:
         }
         return UserRepository.get_or_create_by_phone(user_data)
 
+    @staticmethod
+    def get_or_create_admin():
+        """Get or create admin user with hardcoded credentials"""
+        # Try to find existing admin user
+        admin_user = UserRepository.get_admin_user()
+        if admin_user:
+            return admin_user
+        
+        # Create admin user if doesn't exist
+        admin_data = {
+            "name": "Admin",
+            "phone": "00000000000",  # Unique phone for admin
+            "address": "Restaurant",
+            "role": "admin"
+        }
+        # Use create directly to ensure role is set
+        return UserRepository.create(admin_data)
+
