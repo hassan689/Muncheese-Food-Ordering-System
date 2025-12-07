@@ -1,0 +1,55 @@
+/* Categories */
+.menu-categories {
+  margin-bottom: 40px;
+}
+
+.menu-categories h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+}
+
+.category-card {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.category-card.active {
+  background: #ffc107;
+  color: white;
+}
+
+.category-icon {
+  font-size: 48px;
+}
+
+.category-info h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.category-info p {
+  font-size: 14px;
+  opacity: 0.7;
+}

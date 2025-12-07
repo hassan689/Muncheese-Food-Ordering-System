@@ -14,6 +14,9 @@ export const ORDER_STATUS = {
   CANCELLED: 'cancelled',
 }
 
-
-
-
+// Constants defined for Admin Pages
+export const ADMIN_COLORS = {
+  Primary: "#FFB800",
+  Secondary: "#FFFBE9",
+  Hover: "#fbe3a5ff",
+}

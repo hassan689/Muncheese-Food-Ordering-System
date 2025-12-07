@@ -1,0 +1,26 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.breadcrumb {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.btn-add-item {
+  background: #ffc107;
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-add-item:hover {
+  background: #ffd54f;
+  transform: translateY(-2px);
+}
