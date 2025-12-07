@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import AdminLayout from '../../components/admin/AdminLayout'
+import AdminLayout from '../../layouts/admin/Layout'
 import { orderService } from '../../services/orderService'
 import '../../styles/pages/admin/Orders.css'
 
