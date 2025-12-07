@@ -3,6 +3,7 @@ from .customer_routes import customer_bp
 from .product_routes import product_bp
 from .feedback_routes import feedback_bp
 from .order_routes import order_bp
+from .cloudinary_routes import cloudinary_bp
 from .routes import main as main_bp
 
 def register_blueprints(app):
@@ -14,3 +15,4 @@ def register_blueprints(app):
     app.register_blueprint(product_bp, url_prefix="/api/products")
     app.register_blueprint(feedback_bp, url_prefix="/api/feedback")
     app.register_blueprint(order_bp, url_prefix="/api/orders")
+    app.register_blueprint(cloudinary_bp, url_prefix="/api/cloudinary")

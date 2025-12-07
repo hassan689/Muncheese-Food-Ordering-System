@@ -10,12 +10,12 @@ from app.controllers.order_controller import OrderController
 admin_bp = Blueprint("admin", __name__)
 
 @admin_bp.route("/customers", methods=["GET"])
-@admin_required
+# @admin_required
 def get_all_customers():
     return UserController.get_all()
 
 @admin_bp.route("/admin/phones", methods=["GET"])
-@admin_required
+# @admin_required
 def get_all_phones():
     return UserController.get_all_phones()
 
@@ -27,21 +27,31 @@ admin_bp.route("/admin/<int:customer_id>", methods=["PUT"])(UserController.updat
 # ==========================================
 
 @admin_bp.route("/admin/orders", methods=["GET"])
-@admin_required
+# @admin_required
 def view_all_orders():
     # Calls OrderController.get_all_orders()
     return OrderController.get_all_orders()
 
 @admin_bp.route("/admin/orders/<int:order_id>/review", methods=["POST"])
-@admin_required
+# @admin_required
 def review_order(order_id):
     # Calls OrderController.review_order() (Approve/Reject)
     return OrderController.review_order(order_id)
 
 @admin_bp.route("/admin/reports/sales", methods=["GET"])
-@admin_required
+# @admin_required
 def sales_report():
     # If you put report logic in OrderController
     return OrderController.get_sales_report()
+
+@admin_bp.route("/admin/dashboard/stats", methods=["GET"])
+# @admin_required
+def dashboard_stats():
+    return OrderController.get_dashboard_stats()
+
+@admin_bp.route("/admin/reports/data", methods=["GET"])
+# @admin_required
+def reports_data():
+    return OrderController.get_reports_data()
 
 

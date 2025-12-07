@@ -4,12 +4,14 @@ from app.services.order_service import OrderService
 class OrderController:
     @staticmethod
     def create_order():
-        """Expected JSON: { "customer_id": 1, "total_amount": 500.0 }"""
+        """Expected JSON: { "customer_id": 1, "total_amount": 500.0, "items": [{item_id, quantity, price}] }"""
         try:
             data = request.json
+            items = data.get('items', [])  # List of {item_id, quantity, price}
             order = OrderService.create_initial_order(
                 customer_id=data['customer_id'],
-                total_amount=data['total_amount']
+                total_amount=data['total_amount'],
+                items=items
             )
             return jsonify({"message": "Order started", "order_id": order.order_id}), 201
         except Exception as e:
@@ -105,6 +107,32 @@ class OrderController:
                 return jsonify({"error": "Invalid type. Use daily, monthly, or yearly"}), 400
                 
             data = OrderService.get_analytics(report_type)
+            return jsonify(data), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @staticmethod
+    def get_dashboard_stats():
+        """
+        GET /api/admin/dashboard/stats
+        Returns: daily sales, weekly revenue, and chart data
+        """
+        try:
+            stats = OrderService.get_dashboard_stats()
+            return jsonify(stats), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @staticmethod
+    def get_reports_data():
+        """
+        GET /api/admin/reports/data?start_date=2024-01-01&end_date=2024-12-31
+        Returns: accepted/rejected stats, trend data, and orders list
+        """
+        try:
+            start_date = request.args.get('start_date')
+            end_date = request.args.get('end_date')
+            data = OrderService.get_reports_data(start_date, end_date)
             return jsonify(data), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 500

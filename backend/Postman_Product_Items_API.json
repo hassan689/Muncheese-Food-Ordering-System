@@ -1,0 +1,283 @@
+{
+	"info": {
+		"_postman_id": "product-items-api-2024",
+		"name": "Product Items API - Create Items",
+		"description": "Updated Postman collection for creating product items in Muncheese Food Ordering System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Product Item - New Product with Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"product_name\": \"Margherita Pizza\",\n  \"description\": \"Classic Italian pizza with fresh mozzarella and basil\",\n  \"category\": \"Pizza\",\n  \"size\": \"Small\",\n  \"price\": 10.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/margherita-small.jpg\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/products/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"items"
+					]
+				},
+				"description": "Creates a new product item. If the product doesn't exist, it will be created automatically. If it exists, a new item will be added to that product."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product Item - Existing Product by Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"product_name\": \"Margherita Pizza\",\n  \"size\": \"Medium\",\n  \"price\": 12.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/margherita-medium.jpg\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/products/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"items"
+					]
+				},
+				"description": "Adds a new item to an existing product by using the product name. The product must already exist in the database."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product Item - Existing Product by ID",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"product_id\": 1,\n  \"size\": \"Large\",\n  \"price\": 15.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/margherita-large.jpg\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/products/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"items"
+					]
+				},
+				"description": "Adds a new item to an existing product using the product_id. This is the most efficient method when you know the product ID."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product Item - Without Size (Single Price)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"product_name\": \"Coca Cola\",\n  \"description\": \"Refreshing cola drink\",\n  \"category\": \"Drinks\",\n  \"price\": 2.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/coca-cola.jpg\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/products/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"items"
+					]
+				},
+				"description": "Creates a product item without a size (for items like drinks, sides, etc. that don't have size variations). The size field will be null."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product Item - Burger Example",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"product_name\": \"Classic Burger\",\n  \"description\": \"Juicy beef patty with fresh vegetables\",\n  \"category\": \"Burgers\",\n  \"size\": \"Regular\",\n  \"price\": 8.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/classic-burger.jpg\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/products/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"items"
+					]
+				},
+				"description": "Example: Creating a burger item"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product Item - Dessert Example",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"product_name\": \"Chocolate Brownie\",\n  \"description\": \"Rich chocolate brownie with vanilla ice cream\",\n  \"category\": \"Desserts\",\n  \"price\": 5.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/chocolate-brownie.jpg\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/products/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"items"
+					]
+				},
+				"description": "Example: Creating a dessert item without size"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Product Items",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/products/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"items"
+					]
+				},
+				"description": "Retrieves all product items from the database. Use this to verify created items."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Items by Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/products/items/category?category=Pizza",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"items",
+						"category"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "Pizza",
+							"description": "Category name to filter by"
+						}
+					]
+				},
+				"description": "Get all product items filtered by a specific category"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/products/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"categories"
+					]
+				},
+				"description": "Get all unique product categories"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "api_prefix",
+			"value": "/api/products",
+			"type": "string"
+		}
+	]
+}
+

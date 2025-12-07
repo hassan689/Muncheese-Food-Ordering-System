@@ -48,11 +48,28 @@ class Order(db.Model):
                 "date": self.payment.payment_date.isoformat() if self.payment.payment_date else None
             }
         
+        # Get order items
+        items = []
+        if self.order_items:
+            items = [item.to_dict() for item in self.order_items]
+        
+        # Get customer info
+        customer_info = None
+        if self.customer:
+            customer_info = {
+                "user_id": self.customer.user_id,
+                "name": self.customer.name,
+                "phone": self.customer.phone,
+                "address": self.customer.address
+            }
+        
         return {
             "order_id": self.order_id,
             "status": self.status,
             "total_amount": self.total_amount,
             "created_at": self.created_at.isoformat(),
             "customer_id": self.customer_id,
-            "payment": payment_info
+            "customer": customer_info,
+            "payment": payment_info,
+            "items": items
         }

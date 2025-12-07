@@ -111,6 +111,7 @@ class ProductRepository:
         if has_sizes:
             # Create 3 items for Small, Medium, Large
             prices = data.get("prices", {})
+            image_urls = data.get("image_urls", {})  # Optional: {"Small": "url1", "Medium": "url2", "Large": "url3"}
             sizes = ["Small", "Medium", "Large"]
             
             for size in sizes:
@@ -120,7 +121,8 @@ class ProductRepository:
                 item = ProductItem(
                     product_id=product.product_id,
                     size=size,
-                    price=prices[size]
+                    price=prices[size],
+                    image_url=image_urls.get(size) if image_urls else None
                 )
                 items.append(item)
                 db.session.add(item)
@@ -133,7 +135,8 @@ class ProductRepository:
             item = ProductItem(
                 product_id=product.product_id,
                 size=None,
-                price=price
+                price=price,
+                image_url=data.get("image_url")  # Optional single image URL
             )
             items.append(item)
             db.session.add(item)
@@ -156,4 +159,38 @@ class ProductRepository:
         """Get all unique categories"""
         categories = db.session.query(Product.category).distinct().all()
         return [cat[0] for cat in categories if cat[0]]  # Return list of category strings
+
+    @staticmethod
+    def get_popular_items(limit=4):
+        """
+        Get popular items for landing page.
+        Returns one item per product (the one with the lowest price) up to the limit.
+        """
+        # Get all items
+        all_items = ProductItem.query.all()
+        
+        if not all_items:
+            return []
+        
+        # Group by product_id and get the cheapest item from each product
+        product_map = {}
+        
+        for item in all_items:
+            product_id = item.product_id
+            
+            if product_id not in product_map:
+                product_map[product_id] = item
+            else:
+                # Keep the one with lower price
+                existing = product_map[product_id]
+                if float(item.price) < float(existing.price):
+                    product_map[product_id] = item
+        
+        # Convert to list, sort by price (ascending), and take first 'limit' items
+        popular_items = sorted(
+            list(product_map.values()),
+            key=lambda x: float(x.price)
+        )[:limit]
+        
+        return popular_items
 

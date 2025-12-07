@@ -59,5 +59,23 @@ export const orderService = {
     const response = await api.delete(`/api/orders/${orderId}`)
     return response.data
   },
+
+  getDashboardStats: async () => {
+    const response = await api.get('/api/admin/dashboard/stats')
+    return response.data
+  },
+
+  getReportsData: async (startDate, endDate) => {
+    const params = {}
+    if (startDate) params.start_date = startDate
+    if (endDate) params.end_date = endDate
+    const response = await api.get('/api/admin/reports/data', { params })
+    return response.data
+  },
+
+  getSalesReport: async (type = 'daily') => {
+    const response = await api.get(`/api/admin/reports/sales?type=${type}`)
+    return response.data
+  },
 }
 

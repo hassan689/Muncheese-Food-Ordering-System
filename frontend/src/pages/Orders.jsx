@@ -25,7 +25,12 @@ const Orders = () => {
       try {
         setLoading(true)
         const data = await orderService.getCustomerOrders(parseInt(customerId))
-        setOrders(data || [])
+        // Filter to show only active orders (pending, accepted, preparing, paid, awaiting_approval, location_verified)
+        // Exclude completed and rejected orders
+        const activeOrders = (data || []).filter(order => 
+          order.status !== 'completed' && order.status !== 'rejected'
+        )
+        setOrders(activeOrders)
       } catch (err) {
         console.error('Error fetching orders:', err)
         setError('Failed to load orders. Please try again later.')
@@ -35,6 +40,23 @@ const Orders = () => {
     }
 
     fetchOrders()
+    
+    // Poll for order status updates every 5 seconds
+    const intervalId = setInterval(() => {
+      const customerId = localStorage.getItem('customerId')
+      if (customerId) {
+        orderService.getCustomerOrders(parseInt(customerId))
+          .then(data => {
+            const activeOrders = (data || []).filter(order => 
+              order.status !== 'completed' && order.status !== 'rejected'
+            )
+            setOrders(activeOrders)
+          })
+          .catch(err => console.error('Error polling orders:', err))
+      }
+    }, 5000) // Poll every 5 seconds
+    
+    return () => clearInterval(intervalId) // Cleanup on unmount
   }, [])
 
   const handlePhoneSubmit = async (e) => {

@@ -28,6 +28,7 @@ class ProductItem(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey("products.product_id"), nullable=False)
     size = db.Column(db.String(50), nullable=True)  # e.g., "Small", "Medium", "Large" or None
     price = db.Column(db.Numeric(10, 2), nullable=False)
+    image_url = db.Column(db.String(500), nullable=True)  # Cloudinary URL for product item image
     
     # Relationship to Product
     product = db.relationship("Product", back_populates="items")
@@ -41,5 +42,6 @@ class ProductItem(db.Model):
             "category": self.product.category if self.product else None,
             "size": self.size,
             "price": float(self.price) if self.price else None,
+            "image_url": self.image_url,
         }
 

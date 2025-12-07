@@ -9,7 +9,12 @@ const PopularItems = () => {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const getImageUrl = (itemName) => {
+  const getImageUrl = (item) => {
+    // Use image_url from API if available
+    if (item.image_url) {
+      return item.image_url
+    }
+    // Fallback to category-based images
     const imageMap = {
       'Burger': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop',
       'Pizza': 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop',
@@ -20,11 +25,12 @@ const PopularItems = () => {
       'Chicken': 'https://images.unsplash.com/photo-1606755962773-d324e7882f35?w=400&h=300&fit=crop',
       'Dessert': 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=300&fit=crop',
       'Drink': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=300&fit=crop',
+      'Drinks': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=300&fit=crop',
     }
-    const cleanName = itemName.trim()
-    // Try to match category or product name
+    const category = item.category || ''
+    // Try to match category
     for (const [key, url] of Object.entries(imageMap)) {
-      if (cleanName.toLowerCase().includes(key.toLowerCase())) {
+      if (category.toLowerCase().includes(key.toLowerCase())) {
         return url
       }
     }
@@ -34,60 +40,38 @@ const PopularItems = () => {
   useEffect(() => {
     const fetchPopularItems = async () => {
       try {
-        // Get all product items
-        const allItems = await productService.getProductItems()
+        // Get 4 popular items from API
+        const popularItemsData = await productService.getPopularItems(4)
         
-        if (allItems && allItems.length > 0) {
-          // Group by product and get the first (cheapest) item from each product
-          const productMap = new Map()
+        if (popularItemsData && popularItemsData.length > 0) {
+          const formattedItems = popularItemsData.map((item) => ({
+            id: item.item_id,
+            name: item.product_name,
+            location: `${item.category} Category`,
+            price: `Rs${parseFloat(item.price).toFixed(0)}`,
+            category: item.category,
+            item_id: item.item_id,
+            image_url: item.image_url
+          }))
           
-          allItems.forEach(item => {
-            const productId = item.product_id
-            if (!productMap.has(productId)) {
-              productMap.set(productId, item)
-            } else {
-              // Keep the one with lower price
-              const existing = productMap.get(productId)
-              if (parseFloat(item.price) < parseFloat(existing.price)) {
-                productMap.set(productId, item)
-              }
-            }
-          })
-          
-          // Convert to array and take first 6
-          const popularItems = Array.from(productMap.values())
-            .slice(0, 6)
-            .map((item, index) => ({
-              id: item.item_id,
-              name: item.product_name,
-              location: `${item.category} Category`,
-              price: `Rs${parseFloat(item.price).toFixed(0)}`,
-              category: item.category,
-              item_id: item.item_id
-            }))
-          
-          setItems(popularItems)
+          setItems(formattedItems)
         } else {
           // Fallback to default items if no data
           setItems([
-            { id: 1, name: 'Burger', location: 'Burger Arena', price: 'Rs388' },
-            { id: 2, name: 'Pizza', location: 'Pizza Arena', price: 'Rs100' },
-            { id: 3, name: 'Wrap', location: 'Wrap Arena', price: 'Rs232' },
-            { id: 4, name: 'Fries', location: 'Burger Arena', price: 'Rs500' },
-            { id: 5, name: 'Broast', location: 'Burger Arena', price: 'Rs2343' },
-            { id: 6, name: 'Hotwings', location: 'Burger Arena', price: 'Rs1234' },
+            { id: 1, name: 'Burger', location: 'Burger Arena', price: 'Rs388', category: 'Burgers' },
+            { id: 2, name: 'Pizza', location: 'Pizza Arena', price: 'Rs100', category: 'Pizza' },
+            { id: 3, name: 'Wrap', location: 'Wrap Arena', price: 'Rs232', category: 'Wraps' },
+            { id: 4, name: 'Fries', location: 'Fries Arena', price: 'Rs500', category: 'Fries' },
           ])
         }
       } catch (error) {
         console.error('Error fetching popular items:', error)
         // Fallback to default items on error
         setItems([
-          { id: 1, name: 'Burger', location: 'Burger Arena', price: 'Rs388' },
-          { id: 2, name: 'Pizza', location: 'Pizza Arena', price: 'Rs100' },
-          { id: 3, name: 'Wrap', location: 'Wrap Arena', price: 'Rs232' },
-          { id: 4, name: 'Fries', location: 'Burger Arena', price: 'Rs500' },
-          { id: 5, name: 'Broast', location: 'Burger Arena', price: 'Rs2343' },
-          { id: 6, name: 'Hotwings', location: 'Burger Arena', price: 'Rs1234' },
+          { id: 1, name: 'Burger', location: 'Burger Arena', price: 'Rs388', category: 'Burgers' },
+          { id: 2, name: 'Pizza', location: 'Pizza Arena', price: 'Rs100', category: 'Pizza' },
+          { id: 3, name: 'Wrap', location: 'Wrap Arena', price: 'Rs232', category: 'Wraps' },
+          { id: 4, name: 'Fries', location: 'Fries Arena', price: 'Rs500', category: 'Fries' },
         ])
       } finally {
         setLoading(false)
@@ -119,7 +103,7 @@ const PopularItems = () => {
             <div key={item.id} className="item-card">
               <div className="item-image">
                 <img 
-                  src={getImageUrl(item.name)} 
+                  src={getImageUrl(item)} 
                   alt={item.name}
                   className="item-image-img"
                   loading="lazy"

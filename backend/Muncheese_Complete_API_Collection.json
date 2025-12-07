@@ -1,0 +1,1338 @@
+{
+	"info": {
+		"_postman_id": "muncheese-complete-api-2024",
+		"name": "Muncheese Food Ordering System - Complete API Collection",
+		"description": "Complete Postman collection for Muncheese Food Ordering System including admin, customer, products, orders, payments, and feedback APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. System Health Check",
+			"item": [
+				{
+					"name": "Home - Server Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								""
+							]
+						},
+						"description": "Check if the server is running"
+					},
+					"response": []
+				},
+				{
+					"name": "Test Database Connection",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/test-db",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"test-db"
+							]
+						},
+						"description": "Test database connectivity"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. User Management",
+			"item": [
+				{
+					"name": "Register Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"phone\": \"1234567890\",\n  \"address\": \"123 Main Street, Karachi\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/customers/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"customers",
+								"register"
+							]
+						},
+						"description": "Register a new customer. Note: To create an admin user, you need to manually set role='admin' in the database."
+					},
+					"response": []
+				},
+				{
+					"name": "Register Admin User (Manual)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Admin User\",\n  \"phone\": \"9999999999\",\n  \"address\": \"Admin Office\",\n  \"role\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/customers/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"customers",
+								"register"
+							]
+						},
+						"description": "Register an admin user. Note: You may need to manually update the role in database to 'admin' after registration."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Product Management",
+			"item": [
+				{
+					"name": "3.1 Create Product Items",
+					"item": [
+						{
+							"name": "Create Item - New Product with Name",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"product_name\": \"Margherita Pizza\",\n  \"description\": \"Classic Italian pizza with fresh mozzarella and basil\",\n  \"category\": \"Pizza\",\n  \"size\": \"Small\",\n  \"price\": 10.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/margherita-small.jpg\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/products/items",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"items"
+									]
+								},
+								"description": "Creates a new product and item. If product exists, adds item to existing product."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Item - Existing Product by Name",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"product_name\": \"Margherita Pizza\",\n  \"size\": \"Medium\",\n  \"price\": 12.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/margherita-medium.jpg\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/products/items",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"items"
+									]
+								},
+								"description": "Adds item to existing product by name"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Item - Existing Product by ID",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"product_id\": 1,\n  \"size\": \"Large\",\n  \"price\": 15.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/margherita-large.jpg\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/products/items",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"items"
+									]
+								},
+								"description": "Adds item to existing product by ID (most efficient)"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Item - Without Size",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"product_name\": \"Coca Cola\",\n  \"description\": \"Refreshing cola drink\",\n  \"category\": \"Drinks\",\n  \"price\": 2.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/coca-cola.jpg\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/products/items",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"items"
+									]
+								},
+								"description": "Creates item without size (for drinks, sides, etc.)"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "3.2 Create Product with Multiple Items",
+					"item": [
+						{
+							"name": "Create Product with Sizes (3 items)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"product_name\": \"Pepperoni Pizza\",\n  \"description\": \"Delicious pepperoni pizza\",\n  \"category\": \"Pizza\",\n  \"has_sizes\": true,\n  \"prices\": {\n    \"Small\": 12.99,\n    \"Medium\": 15.99,\n    \"Large\": 18.99\n  },\n  \"image_urls\": {\n    \"Small\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/pepperoni-small.jpg\",\n    \"Medium\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/pepperoni-medium.jpg\",\n    \"Large\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/pepperoni-large.jpg\"\n  }\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/products/products",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"products"
+									]
+								},
+								"description": "Creates a product with 3 items (Small, Medium, Large) in one request"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Product without Sizes (1 item)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"product_name\": \"Chocolate Brownie\",\n  \"description\": \"Rich chocolate brownie\",\n  \"category\": \"Desserts\",\n  \"has_sizes\": false,\n  \"price\": 5.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/chocolate-brownie.jpg\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/products/products",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"products"
+									]
+								},
+								"description": "Creates a product with single item (no size variations)"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "3.3 Get Product Data",
+					"item": [
+						{
+							"name": "Get All Product Items",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/products/items",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"items"
+									]
+								},
+								"description": "Get all product items"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Items by Category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/products/items/category?category=Pizza",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"items",
+										"category"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "Pizza",
+											"description": "Category name"
+										}
+									]
+								},
+								"description": "Get items filtered by category"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Products by Category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/products/products/category?category=Pizza",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"products",
+										"category"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "Pizza",
+											"description": "Category name"
+										}
+									]
+								},
+								"description": "Get products grouped by category"
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Categories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/products/categories",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"categories"
+									]
+								},
+								"description": "Get all unique categories"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "3.4 Update & Delete Products",
+					"item": [
+						{
+							"name": "Update Product Item",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"price\": 11.99,\n  \"image_url\": \"https://res.cloudinary.com/dzcz6psaj/image/upload/v1234567890/updated-image.jpg\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/products/items/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"items",
+										"1"
+									]
+								},
+								"description": "Update a product item (price, size, product name, etc.)"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Product Item",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/products/items/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"products",
+										"items",
+										"1"
+									]
+								},
+								"description": "Delete a product item"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "4. Order Management",
+			"item": [
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer_id\": 1,\n  \"total_amount\": 1500.00\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/orders/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"orders",
+								""
+							]
+						},
+						"description": "Step 1: Create a new order. Returns order_id for next steps."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Delivery Location",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"address\": \"DHA Phase 6, Karachi\",\n  \"lat\": 24.8000,\n  \"lng\": 67.0500\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/orders/1/location",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"orders",
+								"1",
+								"location"
+							]
+						},
+						"description": "Step 2: Add delivery location with geo-fencing validation. Replace '1' with actual order_id from Step 1."
+					},
+					"response": []
+				},
+				{
+					"name": "Make Payment - Online (with screenshot)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "order_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "1500",
+									"type": "text"
+								},
+								{
+									"key": "method",
+									"value": "online",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/orders/payment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"orders",
+								"payment"
+							]
+						},
+						"description": "Step 3: Make online payment. IMPORTANT: Use form-data, not JSON. Upload payment screenshot image file."
+					},
+					"response": []
+				},
+				{
+					"name": "Make Payment - Cash",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "order_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "1500",
+									"type": "text"
+								},
+								{
+									"key": "method",
+									"value": "cash",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/orders/payment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"orders",
+								"payment"
+							]
+						},
+						"description": "Step 3: Make cash payment. No screenshot required."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/orders/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"orders",
+								"1"
+							]
+						},
+						"description": "Get order details by order_id"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/orders/customer?customer_id=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"orders",
+								"customer"
+							],
+							"query": [
+								{
+									"key": "customer_id",
+									"value": "1",
+									"description": "Customer ID"
+								}
+							]
+						},
+						"description": "Get all orders for a specific customer"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"accepted\",\n  \"total_amount\": 1500.00\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/orders/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"orders",
+								"1"
+							]
+						},
+						"description": "Update order details"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5. Feedback & Reviews",
+			"item": [
+				{
+					"name": "Add Feedback",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"item_id\": 1,\n  \"customer_id\": 1,\n  \"no_of_stars\": 5,\n  \"feedback_message\": \"Amazing pizza! Best I've ever had. Will definitely order again.\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/feedback",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"feedback"
+							]
+						},
+						"description": "Add feedback/review after order completion"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reviews by Item",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/feedback/item/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"feedback",
+								"item",
+								"1"
+							]
+						},
+						"description": "Get all reviews for a specific product item with average rating"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/feedback/featured?limit=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"feedback",
+								"featured"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5",
+									"description": "Number of featured reviews (default: 5)"
+								}
+							]
+						},
+						"description": "Get top featured reviews for landing page"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Feedbacks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/feedback",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"feedback"
+							]
+						},
+						"description": "Get all feedbacks (for admin purposes)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "6. Cloudinary Image Management",
+			"item": [
+				{
+					"name": "Upload Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": [],
+									"description": "Image file to upload"
+								},
+								{
+									"key": "folder",
+									"value": "products",
+									"type": "text",
+									"description": "Folder name in Cloudinary (optional, default: products)"
+								},
+								{
+									"key": "public_id",
+									"value": "",
+									"type": "text",
+									"description": "Custom public_id (optional)",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/cloudinary/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cloudinary",
+								"upload"
+							]
+						},
+						"description": "Upload an image to Cloudinary. Returns the secure URL that can be used in product items."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Image Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/cloudinary/info?public_id=products/sample-image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cloudinary",
+								"info"
+							],
+							"query": [
+								{
+									"key": "public_id",
+									"value": "products/sample-image",
+									"description": "Public ID of the image"
+								}
+							]
+						},
+						"description": "Get information about an uploaded image"
+					},
+					"response": []
+				},
+				{
+					"name": "List Images in Folder",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/cloudinary/list?folder=products&max_results=50",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cloudinary",
+								"list"
+							],
+							"query": [
+								{
+									"key": "folder",
+									"value": "products",
+									"description": "Folder name (default: products)"
+								},
+								{
+									"key": "max_results",
+									"value": "50",
+									"description": "Maximum number of results (default: 50)"
+								}
+							]
+						},
+						"description": "List all images in a Cloudinary folder"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Image",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"public_id\": \"products/sample-image\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/cloudinary/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cloudinary",
+								"delete"
+							]
+						},
+						"description": "Delete an image from Cloudinary by public_id"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "7. Admin APIs",
+			"item": [
+				{
+					"name": "7.1 Customer Management",
+					"item": [
+						{
+							"name": "Get All Customers",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "user-id",
+										"value": "{{admin_user_id}}",
+										"description": "Admin user ID (user with role='admin')"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/admin/customers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"admin",
+										"customers"
+									]
+								},
+								"description": "Get all customers (Admin only). Requires user-id header with admin user ID."
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Phone Numbers",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "user-id",
+										"value": "{{admin_user_id}}",
+										"description": "Admin user ID"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/admin/admin/phones",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"admin",
+										"admin",
+										"phones"
+									]
+								},
+								"description": "Get all customer phone numbers (Admin only)"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Customer",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "user-id",
+										"value": "{{admin_user_id}}",
+										"description": "Admin user ID"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Updated Name\",\n  \"phone\": \"9876543210\",\n  \"address\": \"New Address\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/admin/admin/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"admin",
+										"admin",
+										"1"
+									]
+								},
+								"description": "Update customer information (Admin only)"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "7.2 Order Management",
+					"item": [
+						{
+							"name": "Get All Orders",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "user-id",
+										"value": "{{admin_user_id}}",
+										"description": "Admin user ID"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/admin/admin/orders?status=pending",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"admin",
+										"admin",
+										"orders"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "pending",
+											"description": "Optional: Filter by status (pending, accepted, rejected, etc.)",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Get all orders (Admin only). Optional status filter."
+							},
+							"response": []
+						},
+						{
+							"name": "Review Order - Approve",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "user-id",
+										"value": "{{admin_user_id}}",
+										"description": "Admin user ID"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"action\": \"approve\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/admin/admin/orders/1/review",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"admin",
+										"admin",
+										"orders",
+										"1",
+										"review"
+									]
+								},
+								"description": "Approve an order (Admin only). Replace '1' with actual order_id."
+							},
+							"response": []
+						},
+						{
+							"name": "Review Order - Reject",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "user-id",
+										"value": "{{admin_user_id}}",
+										"description": "Admin user ID"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"action\": \"reject\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/admin/admin/orders/1/review",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"admin",
+										"admin",
+										"orders",
+										"1",
+										"review"
+									]
+								},
+								"description": "Reject an order (Admin only). Replace '1' with actual order_id."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "7.3 Reports & Analytics",
+					"item": [
+						{
+							"name": "Sales Report - Daily",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "user-id",
+										"value": "{{admin_user_id}}",
+										"description": "Admin user ID"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/admin/admin/reports/sales?type=daily",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"admin",
+										"admin",
+										"reports",
+										"sales"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "daily",
+											"description": "Report type: daily, monthly, or yearly"
+										}
+									]
+								},
+								"description": "Get daily sales report (Admin only)"
+							},
+							"response": []
+						},
+						{
+							"name": "Sales Report - Monthly",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "user-id",
+										"value": "{{admin_user_id}}",
+										"description": "Admin user ID"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/admin/admin/reports/sales?type=monthly",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"admin",
+										"admin",
+										"reports",
+										"sales"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "monthly",
+											"description": "Report type"
+										}
+									]
+								},
+								"description": "Get monthly sales report (Admin only)"
+							},
+							"response": []
+						},
+						{
+							"name": "Sales Report - Yearly",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "user-id",
+										"value": "{{admin_user_id}}",
+										"description": "Admin user ID"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/admin/admin/reports/sales?type=yearly",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"admin",
+										"admin",
+										"reports",
+										"sales"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "yearly",
+											"description": "Report type"
+										}
+									]
+								},
+								"description": "Get yearly sales report (Admin only)"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "admin_user_id",
+			"value": "1",
+			"type": "string",
+			"description": "Set this to the user_id of a user with role='admin'"
+		}
+	]
+}
+

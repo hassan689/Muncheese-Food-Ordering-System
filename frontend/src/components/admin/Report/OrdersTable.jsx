@@ -9,6 +9,8 @@ const OrdersTable = ({ orders }) => {
   useEffect(() => {
     if (orders && orders.length > 0) {
       setSortedOrders([...orders])
+    } else {
+      setSortedOrders([])
     }
   }, [orders])
 

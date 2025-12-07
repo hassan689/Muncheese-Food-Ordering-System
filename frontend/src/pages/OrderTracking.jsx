@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { orderService } from '../services/orderService'
+import { feedbackService } from '../services/feedbackService'
 import '../styles/pages/OrderTracking.css'
 
 const OrderTracking = () => {
@@ -10,6 +11,13 @@ const OrderTracking = () => {
   const [orderData, setOrderData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [showFeedback, setShowFeedback] = useState(false)
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false)
+  const [rating, setRating] = useState(0)
+  const [hoveredRating, setHoveredRating] = useState(0)
+  const [feedbackMessage, setFeedbackMessage] = useState('')
+  const [submittingFeedback, setSubmittingFeedback] = useState(false)
+  const orderDataRef = useRef(null)
 
   // Get order ID from URL params, location state, or query string
   const getOrderId = () => {
@@ -33,6 +41,7 @@ const OrderTracking = () => {
         setLoading(true)
         const data = await orderService.getOrderById(id)
         setOrderData(data)
+        orderDataRef.current = data
       } catch (err) {
         console.error('Error fetching order:', err)
         let errorMessage = 'Failed to load order details. '
@@ -56,15 +65,56 @@ const OrderTracking = () => {
     fetchOrderData()
   }, [orderId, location])
 
+  // Update ref when orderData changes
+  useEffect(() => {
+    if (orderData) {
+      orderDataRef.current = orderData
+    }
+  }, [orderData])
+
+  // Separate effect for polling order status updates
+  useEffect(() => {
+    if (!orderData) return
+    
+    const id = getOrderId()
+    if (!id) return
+    
+    // If order is completed, show feedback form if not already submitted
+    if (orderData.status === 'completed' && !feedbackSubmitted) {
+      setShowFeedback(true)
+    }
+    
+    // Only poll if order is not completed/rejected
+    if (orderData.status === 'completed' || orderData.status === 'rejected') {
+      return
+    }
+    
+    const intervalId = setInterval(() => {
+      orderService.getOrderById(id)
+        .then(data => {
+          const previousStatus = orderDataRef.current?.status
+          orderDataRef.current = data
+          setOrderData(data)
+          // Check if status changed to completed
+          if (data.status === 'completed' && previousStatus !== 'completed') {
+            setShowFeedback(true)
+          }
+        })
+        .catch(err => console.error('Error polling order status:', err))
+    }, 5000) // Poll every 5 seconds
+    
+    return () => clearInterval(intervalId) // Cleanup on unmount
+  }, [orderData?.status, orderId, feedbackSubmitted])
+
   // Map order status to timeline steps
   const getOrderStatusTimeline = (status) => {
     const statusMap = {
-      'pending': { step: 0, label: 'Order Placed', description: 'Your order has been received' },
-      'location_verified': { step: 1, label: 'Location Verified', description: 'Delivery location confirmed' },
-      'awaiting_approval': { step: 1, label: 'Awaiting Approval', description: 'Payment received, waiting for admin approval' },
-      'paid': { step: 1, label: 'Payment Confirmed', description: 'Payment has been confirmed' },
+      'pending': { step: 0, label: 'Order Placed', description: 'Your order has been received and is pending approval' },
+      'location_verified': { step: 0, label: 'Order Placed', description: 'Your order has been received' },
+      'awaiting_approval': { step: 0, label: 'Order Placed', description: 'Payment received, waiting for admin approval' },
+      'paid': { step: 0, label: 'Order Placed', description: 'Payment has been confirmed, waiting for approval' },
       'accepted': { step: 2, label: 'Preparing', description: 'Your food is being prepared' },
-      'rejected': { step: -1, label: 'Rejected', description: 'Order was rejected' },
+      'rejected': { step: -1, label: 'Rejected', description: 'Your order has been rejected by the restaurant' },
       'completed': { step: 3, label: 'Delivered', description: 'Order has been delivered' }
     }
 
@@ -80,11 +130,6 @@ const OrderTracking = () => {
         status: 'Preparing', 
         completed: currentStatus.step >= 2,
         description: 'Your food is being prepared'
-      },
-      { 
-        status: 'Out for Delivery', 
-        completed: currentStatus.step >= 3,
-        description: 'Your order is on the way'
       },
       { 
         status: 'Delivered', 
@@ -142,6 +187,74 @@ const OrderTracking = () => {
     })
   }
 
+  // Handle feedback submission
+  const handleSubmitFeedback = async (e) => {
+    e.preventDefault()
+    if (rating === 0) {
+      alert('Please provide a rating')
+      return
+    }
+
+    if (!orderData) {
+      alert('Unable to submit feedback: Order data not available')
+      return
+    }
+
+    // Debug: Log order data structure
+    console.log('Order data:', orderData)
+    console.log('Order items:', orderData.items)
+
+    if (!orderData.items || orderData.items.length === 0) {
+      alert('Unable to submit feedback: Order items not available. Please refresh the page and try again.')
+      return
+    }
+
+    const customerId = orderData.customer_id || localStorage.getItem('customerId')
+    if (!customerId) {
+      alert('Unable to submit feedback: Customer information not available')
+      return
+    }
+
+    try {
+      setSubmittingFeedback(true)
+      
+      // Submit feedback for the first item in the order (or allow multiple items)
+      const firstItem = orderData.items[0]
+      
+      if (!firstItem.item_id) {
+        alert('Unable to submit feedback: Item ID not found in order data')
+        setSubmittingFeedback(false)
+        return
+      }
+      
+      const feedbackData = {
+        item_id: firstItem.item_id,
+        customer_id: parseInt(customerId),
+        no_of_stars: rating,
+        feedback_message: feedbackMessage || null
+      }
+      
+      console.log('Submitting feedback:', feedbackData)
+
+      await feedbackService.submitFeedback(feedbackData)
+      setFeedbackSubmitted(true)
+      setShowFeedback(false)
+    } catch (error) {
+      console.error('Error submitting feedback:', error)
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to submit feedback. Please try again.'
+      alert(errorMessage)
+    } finally {
+      setSubmittingFeedback(false)
+    }
+  }
+
+  // Check if order is completed and show feedback form
+  useEffect(() => {
+    if (orderData && orderData.status === 'completed' && !feedbackSubmitted) {
+      setShowFeedback(true)
+    }
+  }, [orderData, feedbackSubmitted])
+
   if (loading) {
     return (
       <div className="order-tracking-page">
@@ -163,6 +276,65 @@ const OrderTracking = () => {
               animation: 'spin 1s linear infinite'
             }}></div>
             <p style={{ fontSize: '18px', fontWeight: '600', color: '#03081f' }}>Loading order details...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Show rejection message if order is rejected
+  if (orderData && orderData.status === 'rejected') {
+    return (
+      <div className="order-tracking-page">
+        <div className="order-tracking-container">
+          <div className="error-container" style={{
+            textAlign: 'center',
+            padding: '60px 40px',
+            background: '#fff5f5',
+            borderRadius: '16px',
+            border: '2px solid #ffcccc',
+            margin: '40px'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>❌</div>
+            <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#cc0000', marginBottom: '12px' }}>
+              Order Rejected
+            </h2>
+            <p style={{ color: '#666', marginBottom: '12px', fontSize: '16px' }}>
+              Your order #{orderData.order_id} has been rejected by the restaurant.
+            </p>
+            <p style={{ color: '#999', marginBottom: '24px', fontSize: '14px' }}>
+              If you have any questions or concerns, please contact us.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button 
+                onClick={() => navigate('/contact')}
+                style={{
+                  padding: '12px 24px',
+                  background: '#ffb800',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#03081f',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Contact Us
+              </button>
+              <button 
+                onClick={() => navigate('/menu')}
+                style={{
+                  padding: '12px 24px',
+                  background: '#03081f',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#fff',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Order Again
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -247,32 +419,192 @@ const OrderTracking = () => {
 
             <div className="order-status-card">
               <h3 className="status-card-title">Order Status</h3>
-              <div className="status-timeline">
-                {orderStatus.map((item, index) => (
-                  <div key={index} className={`status-item ${item.completed ? 'completed' : 'pending'}`}>
-                    <div className={`status-icon ${item.completed ? 'completed' : 'pending'}`}>
-                      {item.completed ? (
-                        <span style={{ fontSize: '24px' }}>✓</span>
-                      ) : (
-                        <span style={{ fontSize: '24px', opacity: 0.5 }}>○</span>
-                      )}
-                    </div>
-                    <div className="status-content">
-                      <div className="status-header">
-                        <p className="status-name">{item.status}</p>
-                        {orderData.created_at && item.completed && (
-                          <p className="status-time">{formatTime(orderData.created_at)}</p>
+              {(orderData.status === 'accepted' || orderData.status === 'completed' || orderData.status === 'pending' || orderData.status === 'paid' || orderData.status === 'awaiting_approval' || orderData.status === 'location_verified') ? (
+                <div className="status-timeline">
+                  {orderStatus.map((item, index) => (
+                    <div key={index} className={`status-item ${item.completed ? 'completed' : 'pending'}`}>
+                      <div className={`status-icon ${item.completed ? 'completed' : 'pending'}`}>
+                        {item.completed ? (
+                          <span style={{ fontSize: '24px' }}>✓</span>
+                        ) : (
+                          <span style={{ fontSize: '24px', opacity: 0.5 }}>○</span>
                         )}
                       </div>
-                      <p className="status-description">{item.description}</p>
+                      <div className="status-content">
+                        <div className="status-header">
+                          <p className="status-name">{item.status}</p>
+                          {orderData.created_at && item.completed && (
+                            <p className="status-time">{formatTime(orderData.created_at)}</p>
+                          )}
+                        </div>
+                        <p className="status-description">{item.description}</p>
+                      </div>
+                      {index < orderStatus.length - 1 && (
+                        <div className={`status-connector ${item.completed ? 'completed' : ''}`}></div>
+                      )}
                     </div>
-                    {index < orderStatus.length - 1 && (
-                      <div className={`status-connector ${item.completed ? 'completed' : ''}`}></div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ 
+                  padding: '20px', 
+                  textAlign: 'center',
+                  background: '#f5f5f5',
+                  borderRadius: '8px'
+                }}>
+                  <p style={{ fontSize: '16px', color: '#666' }}>
+                    Current Status: <strong>{orderData.status === 'pending' ? 'Pending' : orderData.status}</strong>
+                  </p>
+                  <p style={{ fontSize: '14px', color: '#999', marginTop: '8px' }}>
+                    {orderData.status === 'pending' 
+                      ? 'Your order has been placed and is waiting for admin approval.'
+                      : 'Your order is being processed. You\'ll be able to track it once it\'s accepted.'}
+                  </p>
+                </div>
+              )}
             </div>
+
+            {/* Feedback Form - Show when order is completed */}
+            {orderData.status === 'completed' && !feedbackSubmitted && (
+              <div className="feedback-card" style={{
+                marginTop: '20px',
+                padding: '24px',
+                background: '#fff',
+                borderRadius: '12px',
+                border: '2px solid #ffb800'
+              }}>
+                <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px', color: '#03081f' }}>
+                  How was your order?
+                </h3>
+                <p style={{ color: '#666', marginBottom: '20px' }}>
+                  We'd love to hear about your experience!
+                </p>
+                
+                {!showFeedback ? (
+                  <button
+                    onClick={() => setShowFeedback(true)}
+                    style={{
+                      padding: '12px 24px',
+                      background: '#ffb800',
+                      border: 'none',
+                      borderRadius: '8px',
+                      color: '#03081f',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      fontSize: '16px'
+                    }}
+                  >
+                    Leave Feedback
+                  </button>
+                ) : (
+                  <form onSubmit={handleSubmitFeedback} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#03081f' }}>
+                        Rating
+                      </label>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span
+                            key={star}
+                            onClick={() => setRating(star)}
+                            onMouseEnter={() => setHoveredRating(star)}
+                            onMouseLeave={() => setHoveredRating(0)}
+                            style={{
+                              fontSize: '32px',
+                              color: star <= (hoveredRating || rating) ? '#ffb800' : '#ddd',
+                              cursor: 'pointer',
+                              transition: 'color 0.2s'
+                            }}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#03081f' }}>
+                        Your Feedback (optional)
+                      </label>
+                      <textarea
+                        value={feedbackMessage}
+                        onChange={(e) => setFeedbackMessage(e.target.value)}
+                        placeholder="Tell us about your experience..."
+                        rows={4}
+                        style={{
+                          width: '100%',
+                          padding: '12px',
+                          border: '2px solid #e0e0e0',
+                          borderRadius: '8px',
+                          fontSize: '14px',
+                          fontFamily: 'inherit',
+                          resize: 'vertical'
+                        }}
+                      />
+                    </div>
+                    
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <button
+                        type="submit"
+                        disabled={rating === 0 || submittingFeedback}
+                        style={{
+                          padding: '12px 24px',
+                          background: rating === 0 || submittingFeedback ? '#ccc' : '#ffb800',
+                          border: 'none',
+                          borderRadius: '8px',
+                          color: '#03081f',
+                          fontWeight: '600',
+                          cursor: rating === 0 || submittingFeedback ? 'not-allowed' : 'pointer',
+                          fontSize: '16px',
+                          flex: 1
+                        }}
+                      >
+                        {submittingFeedback ? 'Submitting...' : 'Submit Feedback'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowFeedback(false)
+                          setRating(0)
+                          setFeedbackMessage('')
+                        }}
+                        style={{
+                          padding: '12px 24px',
+                          background: 'transparent',
+                          border: '2px solid #e0e0e0',
+                          borderRadius: '8px',
+                          color: '#666',
+                          fontWeight: '600',
+                          cursor: 'pointer',
+                          fontSize: '16px'
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            )}
+
+            {feedbackSubmitted && (
+              <div className="feedback-success" style={{
+                marginTop: '20px',
+                padding: '24px',
+                background: '#f0f9f0',
+                borderRadius: '12px',
+                border: '2px solid #4CAF50',
+                textAlign: 'center'
+              }}>
+                <div style={{ fontSize: '48px', marginBottom: '12px' }}>✓</div>
+                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#4CAF50', marginBottom: '8px' }}>
+                  Thank You for Your Feedback!
+                </h3>
+                <p style={{ color: '#666', fontSize: '14px' }}>
+                  Your feedback has been submitted successfully.
+                </p>
+              </div>
+            )}
 
             {deliveryInfo && (
               <div className="delivery-info-card">
@@ -322,16 +654,29 @@ const OrderTracking = () => {
               </p>
             </div>
             
-            {/* Note: Order items are not stored in the order model currently */}
-            {/* This would need to be added to the backend if you want to track individual items */}
             <div className="order-items-list">
-              <div className="order-detail-item">
-                <div className="order-item-info">
-                  <p className="order-item-name">Order #{orderData.order_id}</p>
-                  <p className="order-item-notes">Status: {orderData.status}</p>
-                  <p className="order-item-price">RS {orderData.total_amount?.toFixed(2) || '0.00'}</p>
+              {orderData.items && orderData.items.length > 0 ? (
+                orderData.items.map((item, index) => (
+                  <div key={item.order_item_id || index} className="order-detail-item">
+                    <div className="order-item-info">
+                      <p className="order-item-name">{item.product_name || item.name || 'Unknown Item'}</p>
+                      {item.size && <p className="order-item-notes">Size: {item.size}</p>}
+                      {item.description && <p className="order-item-notes">{item.description}</p>}
+                      <p className="order-item-price">
+                        Rs{(item.price || 0).toFixed(2)} x {item.quantity || 1} = Rs{((item.price || 0) * (item.quantity || 1)).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="order-detail-item">
+                  <div className="order-item-info">
+                    <p className="order-item-name">Order #{orderData.order_id}</p>
+                    <p className="order-item-notes">Status: {orderData.status}</p>
+                    <p className="order-item-price">RS {orderData.total_amount?.toFixed(2) || '0.00'}</p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="order-summary">

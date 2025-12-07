@@ -1,7 +1,7 @@
 from app.repositories.payment_repository import PaymentRepository
 from app.repositories.order_repository import OrderRepository
 from app.models.payment import Payment
-from app.utils.s3_utils import upload_file_to_r2 # <--- Import this
+from app.utils.cloudinary_utils import upload_image_to_cloudinary
 import time
 
 class PaymentService:
@@ -17,30 +17,35 @@ class PaymentService:
             if not screenshot_file:
                 raise ValueError("Online payment requires a screenshot.")
             
-            # --- CLOUDFLARE UPLOAD LOGIC START ---
+            # --- CLOUDINARY UPLOAD LOGIC START ---
             
-            # 1. Create a safe filename (e.g., "proof_101_170023423.png")
+            # 1. Create a safe public_id (e.g., "payments/proof_101_170023423")
             # We use timestamp to ensure uniqueness
             timestamp = int(time.time())
-            original_ext = screenshot_file.filename.split('.')[-1]
-            safe_filename = f"proof_{order_id}_{timestamp}.{original_ext}"
+            public_id = f"payments/proof_{order_id}_{timestamp}"
 
-            # 2. Upload using our Helper
+            # 2. Upload using Cloudinary
             # screenshot_file is the actual file object from Flask
-            image_url = upload_file_to_r2(
+            upload_result = upload_image_to_cloudinary(
                 screenshot_file, 
-                safe_filename, 
-                screenshot_file.content_type
+                folder="payments",
+                public_id=public_id
             )
             
-            # --- CLOUDFLARE UPLOAD LOGIC END ---
+            if not upload_result.get("success"):
+                raise ValueError(f"Failed to upload screenshot: {upload_result.get('error', 'Unknown error')}")
+            
+            # Get the secure URL from Cloudinary
+            image_url = upload_result.get("url")
+            
+            # --- CLOUDINARY UPLOAD LOGIC END ---
 
         # Save to DB
         payment = Payment(
             order_id=order_id,
             method=method,
             amount=amount,
-            screenshot_url=image_url # <--- Now storing the REAL R2 URL
+            screenshot_url=image_url # <--- Now storing the Cloudinary URL
         )
         PaymentRepository.create(payment)
 

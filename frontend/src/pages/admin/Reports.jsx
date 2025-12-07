@@ -3,89 +3,24 @@ import AdminLayout from '../../layouts/admin/Layout'
 import DonutChart from '../../components/admin/Report/DonutChart'
 import LineChart from '../../components/admin/Report/LineChart'
 import OrdersTable from '../../components/admin/Report/OrdersTable'
+import { orderService } from '../../services/orderService'
 import '../../styles/pages/admin/Reports.css'
 
-const fetchReportData = () => {
-  return {
-    chartData: {
-      accepted: 80,
-      rejected: 20
-    },
-    trendData: {
-      accepted: [
-        { month: 'JAN', value: 3000 },
-        { month: 'FEB', value: 3500 },
-        { month: 'MAR', value: 4000 },
-        { month: 'APR', value: 4500 },
-        { month: 'MAY', value: 5000 },
-        { month: 'JUN', value: 5200 },
-        { month: 'JUL', value: 5400 },
-        { month: 'AUG', value: 5600 },
-        { month: 'SEP', value: 5800 },
-        { month: 'OCT', value: 6000 },
-        { month: 'NOV', value: 6200 },
-        { month: 'DEC', value: 6500 }
-      ],
-      rejected: [
-        { month: 'JAN', value: 1500 },
-        { month: 'FEB', value: 1600 },
-        { month: 'MAR', value: 1400 },
-        { month: 'APR', value: 1700 },
-        { month: 'MAY', value: 1800 },
-        { month: 'JUN', value: 1900 },
-        { month: 'JUL', value: 2000 },
-        { month: 'AUG', value: 1950 },
-        { month: 'SEP', value: 2100 },
-        { month: 'OCT', value: 2200 },
-        { month: 'NOV', value: 2300 },
-        { month: 'DEC', value: 2400 }
-      ]
-    },
-    orders: [
-      {
-        id: '#12354564',
-        customerName: 'Watson Joyce',
-        phone: '+1 (123) 123 4654',
-        orderDate: '28. 03. 2024',
-        total: '$250.00'
-      },
-      {
-        id: '#12354565',
-        customerName: 'Sarah Johnson',
-        phone: '+1 (123) 456 7890',
-        orderDate: '29. 03. 2024',
-        total: '$180.00'
-      },
-      {
-        id: '#12354566',
-        customerName: 'Michael Brown',
-        phone: '+1 (123) 987 6543',
-        orderDate: '30. 03. 2024',
-        total: '$320.00'
-      },
-      {
-        id: '#12354567',
-        customerName: 'Emily Davis',
-        phone: '+1 (123) 111 2222',
-        orderDate: '31. 03. 2024',
-        total: '$275.00'
-      },
-      {
-        id: '#12354568',
-        customerName: 'David Wilson',
-        phone: '+1 (123) 333 4444',
-        orderDate: '01. 04. 2024',
-        total: '$195.00'
-      }
-    ]
-  };
-};
-
 const Reports = () => {
-  // UI State
+  // UI State - Set default date range to last 12 months
+  const getDefaultStartDate = () => {
+    const date = new Date()
+    date.setMonth(date.getMonth() - 12)
+    return date.toISOString().split('T')[0]
+  }
+  
+  const getDefaultEndDate = () => {
+    return new Date().toISOString().split('T')[0]
+  }
+  
   const [activeTab, setActiveTab] = useState('Accepted')
-  const [startDate, setStartDate] = useState('2024-04-01')
-  const [endDate, setEndDate] = useState('2024-04-08')
+  const [startDate, setStartDate] = useState(getDefaultStartDate())
+  const [endDate, setEndDate] = useState(getDefaultEndDate())
   
   // Data State
   const [chartData, setChartData] = useState(null)
@@ -107,16 +42,16 @@ const Reports = () => {
       setLoading(true)
       setError(null)
       
-      // Fetch data from API (or use dummy data for now)
-      const data = await fetchReportData();
+      // Fetch data from API
+      const data = await orderService.getReportsData(startDate, endDate);
       
       // Update all states with fetched data
-      setChartData(data.chartData)
-      setTrendData(data.trendData)
-      setOrders(data.orders)
+      setChartData(data.chartData || { accepted: 0, rejected: 0 })
+      setTrendData(data.trendData || { accepted: [], rejected: [] })
+      setOrders(data.orders || [])
       
     } catch (err) {
-      setError(err.message)
+      setError(err.message || 'Failed to load report data')
       console.error('Error loading report data:', err)
     } finally {
       setLoading(false)

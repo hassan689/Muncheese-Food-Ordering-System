@@ -68,10 +68,18 @@ const Checkout = () => {
         localStorage.setItem('customerInfo', JSON.stringify(formData))
       }
 
-      // Step 2: Create order
+      // Step 2: Create order with items
+      // Prepare items from cart
+      const items = cart.map(item => ({
+        item_id: item.item_id || item.id,
+        quantity: item.quantity || 1,
+        price: item.price
+      }))
+      
       const orderData = {
         customer_id: parseInt(customerId),
-        total_amount: total
+        total_amount: total,
+        items: items
       }
       const orderResponse = await orderService.createOrder(orderData)
       const orderId = orderResponse.order_id
