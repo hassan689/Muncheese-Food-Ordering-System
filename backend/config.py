@@ -13,7 +13,7 @@ class Config:
     R2_PUBLIC_DOMAIN=os.environ.get('R2_PUBLIC_DOMAIN')
     
     # Cloudinary Configuration
-    CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME', 'dzcz6psaj')
-    CLOUDINARY_API_KEY = os.environ.get('CLOUDINARY_API_KEY', '873474233552936')
-    CLOUDINARY_API_SECRET = os.environ.get('CLOUDINARY_API_SECRET', 'eAS3HhwepXJHhlIxY1l5U_Vy4u8')
-    CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL', 'cloudinary://873474233552936:eAS3HhwepXJHhlIxY1l5U_Vy4u8@dzcz6psaj')
+    CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME')
+    CLOUDINARY_API_KEY = os.environ.get('CLOUDINARY_API_KEY')
+    CLOUDINARY_API_SECRET = os.environ.get('CLOUDINARY_API_SECRET')
+    CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
