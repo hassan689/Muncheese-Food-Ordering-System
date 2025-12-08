@@ -126,29 +126,12 @@ const MenuPage = () => {
       // Get admin user ID from localStorage for authentication
       const adminUserId = localStorage.getItem('adminUserId') || '1';
       
-      // Create FormData object if formData is not already FormData
-      const apiFormData = new FormData();
-      apiFormData.append('product_name', formData.product_name);
-      apiFormData.append('description', formData.description);
-      apiFormData.append('category', formData.category);
-      apiFormData.append('has_sizes', formData.has_sizes);
-
-      if (formData.has_sizes) {
-        apiFormData.append('price_small', formData.prices.Small);
-        apiFormData.append('price_medium', formData.prices.Medium);
-        apiFormData.append('price_large', formData.prices.Large);
-        if (formData.file_small) apiFormData.append('file_small', formData.file_small);
-        if (formData.file_medium) apiFormData.append('file_medium', formData.file_medium);
-        if (formData.file_large) apiFormData.append('file_large', formData.file_large);
-      } else {
-        apiFormData.append('price', formData.price);
-        if (formData.file) apiFormData.append('file', formData.file);
-      }
-
-      const response = await api.post("/api/products/products", apiFormData, {
+      // formData is already a FormData object from MenuAddItem
+      // Just send it directly - axios will handle Content-Type automatically
+      const response = await api.post("/api/products/products", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           'user-id': adminUserId
+          // Don't set Content-Type - axios will set it automatically with boundary for FormData
         }
       });
 
