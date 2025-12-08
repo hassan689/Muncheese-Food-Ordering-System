@@ -12,6 +12,15 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
+    // If data is FormData, let axios set Content-Type automatically (with boundary)
+    // Otherwise, use application/json
+    if (!(config.data instanceof FormData)) {
+      config.headers['Content-Type'] = 'application/json'
+    } else {
+      // Remove Content-Type header for FormData - axios will set it with boundary
+      delete config.headers['Content-Type']
+    }
+    
     // Add admin token if available (for admin routes)
     const adminToken = localStorage.getItem('adminToken')
     if (adminToken) {
